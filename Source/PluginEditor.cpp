@@ -229,8 +229,8 @@ const std::vector<KnobDef>& knobDefs()
         { "filter-frequency", "cutoff", {}, 135 },
         { "resonance", "resonance", {}, 135 },
         { "filter-mode", "filterMode", { -70, 0, 70 }, 0 },
-        { "filter-mod1", "filterEnv", {}, 135 },
-        { "filter-mod2", "filterLfo", {}, 135 },
+        { "filter-mod1", "filterLfo", {}, 135 },   // left: control osc -> filter (as on the panel arrows)
+        { "filter-mod2", "filterEnv", {}, 135 },   // right: control env -> filter
         { "vca-attack", "vcaAttack", {}, 135 },
         { "vca-decay", "vcaDecay", {}, 135 },
         { "vca-sustain", "vcaSustain", {}, 135 },
