@@ -148,6 +148,7 @@ and the mod wheel (CC 1, adds pitch modulation from the control oscillator). Vel
 
 HISTORY = [
     ("1.0.4", [
+        "A yellow arrow on the panel now shows that SYNC acts on the oscillators.",
         "Fixed: the left -/+ filter knob is now the control oscillator (LFO) amount and the right one the control envelope amount, matching the arrows on the panel.",
     ]),
     ("1.0.3", [
