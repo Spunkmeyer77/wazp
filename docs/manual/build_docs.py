@@ -110,7 +110,7 @@ the preset window shows its name and value. The window can be resized from the b
         ("Wave", "Shape of the control oscillator: sine, square, noise (smoothed random movement) and RND (a new random value every cycle: sample and hold)."),
     ]) + "<h3>Filter</h3>" + rows([
         ("FREQ.", "Filter cutoff frequency, 20 Hz to 20 kHz."),
-        ("Q", "Resonance. The filter is two stages in series, so it rings hard and screams; at the top it self-oscillates and whistles by itself, even with the oscillators off."),
+        ("Q", "Resonance. The filter is two stages in series, so it rings hard and screams. At the top it sits right at the edge of self-oscillation: a piercing, singing resonance on every note, at any cutoff."),
         ("CONTROL", "Filter type: LO (low-pass), BAND (band-pass) or HI (high-pass)."),
         ("Left -/+ knob", "Amount of the control oscillator on the cutoff (wah, wobble, random filter steps), up to +/- 8 kHz. With a low FREQ. setting a deep amount can close the filter completely on the low part of the cycle, giving a gated, chopped sound. Centre = no modulation."),
         ("Right -/+ knob", "Amount of the CONTROL ENV. on the cutoff. Right of centre opens the filter, left of centre closes it (inverted envelope)."),
@@ -148,6 +148,8 @@ and the mod wheel (CC 1, adds pitch modulation from the control oscillator). Vel
 
 HISTORY = [
     ("1.0.4", [
+        "Full Q is now stable at every cutoff: it rings very hard on every note instead of blooming into a delayed whistle at high cutoffs.",
+        "The preset list is bigger and easier to read.",
         "A yellow arrow on the panel now shows that SYNC acts on the oscillators.",
         "Fixed: the left -/+ filter knob is now the control oscillator (LFO) amount and the right one the control envelope amount, matching the arrows on the panel.",
     ]),

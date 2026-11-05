@@ -348,7 +348,7 @@ WazpEditor::MenuLook::MenuLook()
 
 juce::Font WazpEditor::MenuLook::getPopupMenuFont()
 {
-    return juce::Font(juce::FontOptions(juce::Font::getDefaultMonospacedFontName(), 16.0f, juce::Font::bold));
+    return juce::Font(juce::FontOptions(juce::Font::getDefaultMonospacedFontName(), 22.0f, juce::Font::bold));
 }
 
 void WazpEditor::MenuLook::drawPopupMenuBackground(juce::Graphics& g, int w, int h)
@@ -381,7 +381,8 @@ void WazpEditor::showPresetList()
     menu.addItem(10000, "OPEN PRESET FOLDER");
 
     juce::Component::SafePointer<WazpEditor> safe(this);
-    menu.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(&display).withMinimumWidth(display.getWidth())
+    menu.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(&display).withMinimumWidth(juce::jmax(360, display.getScreenBounds().getWidth()))
+                           .withStandardItemHeight(34)
                            .withMaximumNumColumns(1),
                        [safe](int result)
                        {

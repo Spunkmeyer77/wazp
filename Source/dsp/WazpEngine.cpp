@@ -125,7 +125,7 @@ void Engine::render(float* out, int n, const Params& p)
     const float lfoHz = 8000.0f * expAmt(p.filterLfo);
     // two cascaded state-variable filters: stage 1 Q 0..1 (self-oscillates at the top), stage 2 Q 0..0.55
     const float res = std::clamp(p.resonance, 0.0f, 1.0f);
-    const float k1 = 2.0f * (1.0f - res) - 0.06f * res * res * res * res;   // tips just past self-oscillation at full Q
+    const float k1 = std::max(0.025f, 2.0f * (1.0f - res));   // full Q = right at the edge: rings very hard, never runs away
     const float k2 = 2.0f * (1.0f - 0.55f * res);
 
     if (pendingTrigger)
