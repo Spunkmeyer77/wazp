@@ -1,0 +1,152 @@
+# Builds WAZP on macOS, Windows and Linux.
+# - every push / pull request: builds + installers, downloadable under the run's "Artifacts"
+# - pushing a tag like v0.1.0: also publishes a GitHub Release with all installers attached
+name: Build WAZP
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macOS
+            os: macos-14
+            configure: -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+          - name: Windows
+            os: windows-2022
+            configure: ""
+          - name: Linux
+            os: ubuntu-22.04
+            configure: -DCMAKE_BUILD_TYPE=Release -DWAZP_BUILD_TESTS=ON
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Read version
+        run: echo "VERSION=$(sed -nE 's/^project\(WAZP VERSION ([0-9.]+)\).*/\1/p' CMakeLists.txt)" >> "$GITHUB_ENV"
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev libjack-jackd2-dev libfreetype6-dev libfontconfig1-dev \
+            libx11-dev libxcomposite-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev \
+            libxrender-dev libgl1-mesa-dev xvfb
+
+      - name: Configure
+        run: cmake -B build -DWAZP_COPY_PLUGINS=OFF ${{ matrix.configure }}
+
+      - name: Build
+        run: |
+          set +e
+          cmake --build build --config Release --parallel 4 2>&1 | tee build.log
+          status=${PIPESTATUS[0]}
+          if [ "$status" -ne 0 ]; then
+            echo "## Build errors (${{ matrix.name }})" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            grep -iE "error|fatal|undefined reference|unresolved" build.log | grep -v "warning" | head -60 >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            grep -iE " error |error:|fatal error|unresolved external" build.log | head -10 | while IFS= read -r line; do echo "::error::${line:0:900}"; done
+          fi
+          exit $status
+
+      # ---- tests / validation ------------------------------------------------------------
+      - name: Run plug-in tests (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          mkdir -p test-out
+          xvfb-run -a build/WAZPTest_artefacts/Release/WAZPTest test-out
+
+      - name: Upload test output (Linux)
+        if: runner.os == 'Linux' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: WAZP-test-output
+          path: test-out/*
+
+      - name: Validate Audio Unit (macOS)
+        if: runner.os == 'macOS'
+        continue-on-error: true
+        run: |
+          mkdir -p ~/Library/Audio/Plug-Ins/Components
+          cp -R "build/WAZP_artefacts/Release/AU/WAZP.component" ~/Library/Audio/Plug-Ins/Components/
+          killall -9 AudioComponentRegistrar 2>/dev/null || true
+          auval -v aumu Wazp Tcro
+
+      # ---- packaging ---------------------------------------------------------------------
+      - name: Package (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          chmod +x tools/make_pkg.sh
+          ./tools/make_pkg.sh
+          mv "dist/WAZP-$VERSION.pkg" "dist/WAZP-$VERSION-macOS.pkg"
+          cd build/WAZP_artefacts/Release
+          ditto -c -k --keepParent "AU/WAZP.component" "$GITHUB_WORKSPACE/dist/WAZP-$VERSION-macOS-AU.zip"
+          ditto -c -k --keepParent "VST3/WAZP.vst3" "$GITHUB_WORKSPACE/dist/WAZP-$VERSION-macOS-VST3.zip"
+
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $iscc = Join-Path ${env:ProgramFiles(x86)} "Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress }
+          & $iscc "/DAppVersion=$env:VERSION" "installer\windows\WAZP.iss" 2>&1 | Tee-Object -FilePath iscc.log
+          if ($LASTEXITCODE -ne 0) {
+            "## Inno Setup errors" | Out-File -Append $env:GITHUB_STEP_SUMMARY
+            Get-Content iscc.log -Tail 30 | ForEach-Object { "::error::$_" }
+            exit $LASTEXITCODE
+          }
+          Compress-Archive -Path "build\WAZP_artefacts\Release\VST3\WAZP.vst3" `
+                           -DestinationPath "dist\WAZP-$env:VERSION-Windows-VST3.zip"
+
+      - name: Package (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          chmod +x tools/package_linux.sh
+          ./tools/package_linux.sh
+
+      - name: Add the manual
+        run: cp "docs/WAZP Manual.pdf" "docs/WAZP Update History.pdf" dist/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: WAZP-${{ env.VERSION }}-${{ matrix.name }}
+          path: dist/*
+          if-no-files-found: error
+
+  release:
+    name: Publish release
+    needs: build
+    # a pushed tag vX.Y.Z, or a commit on main whose message contains [release], publishes the release
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v') || (github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[release]'))
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v5
+      - name: Read version
+        run: echo "VERSION=$(sed -nE 's/^project\(WAZP VERSION ([0-9.]+)\).*/\1/p' CMakeLists.txt)" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          tag_name: v${{ env.VERSION }}
+          name: WAZP ${{ env.VERSION }}
+          body: "WAZP ${{ env.VERSION }} - monophonic synthesizer by Ticco Ross. See WAZP Update History.pdf. macOS: the .pkg installer; Windows: the Setup.exe; Linux: the .tar.gz. The manual is attached."
+          generate_release_notes: false
