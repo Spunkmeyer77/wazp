@@ -124,6 +124,7 @@ the preset window shows its name and value. The window can be resized from the b
     d.page("""<h2>Presets</h2>
 <p>The preset window at the top right shows the current preset number and name.</p>""" + rows([
         ("&lt; &nbsp;&gt;", "Step through the factory presets, followed by your own presets."),
+        ("Preset display", "Click the name to open the full preset list: all factory presets, then your own presets (MY PRESETS). The current one is ticked; click any name to load it. OPEN PRESET FOLDER at the bottom shows your presets in Finder / Explorer."),
         ("SAVE", "Saves the current sound as a .wazp file. By default it goes to <i>Documents / Ticco Ross / WAZP / Presets</i>; presets saved there appear in the &lt; &gt; list."),
         ("LOAD", "Opens any .wazp file."),
     ]) + """<p>WAZP comes with 16 factory presets: INIT, BUZZ BASS, WASP STING, SYNC SCREAM, REPEAT PERC, DREXY ACID, NOISE WIND,
@@ -152,6 +153,7 @@ HISTORY = [
         "NOISE and RND control-oscillator shapes now use raw pink noise.",
         "New two-stage filter: much stronger resonance that screams and self-oscillates at full Q.",
         "Output drive stage after the filter for a louder, grittier sound.",
+        "Click the preset display to see the full preset list (factory and your own) and pick any preset directly.",
     ]),
     ("1.0.2", [
         "The manual now has a clear macOS security warning section explaining how to open the installer.",

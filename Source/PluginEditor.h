@@ -90,6 +90,7 @@ private:
     void showValue(const juce::String& paramId);
     void savePreset();
     void loadPreset();
+    void showPresetList();
 
     WazpProcessor& proc;
     Panel panel;
@@ -104,7 +105,20 @@ private:
 
     juce::String displayText, valueText;
     double valueUntil = 0.0;
-    struct Display : public juce::Component { juce::String text; void paint(juce::Graphics&) override; } display;
+    struct Display : public juce::Component
+    {
+        juce::String text;
+        std::function<void()> onClick;
+        void paint(juce::Graphics&) override;
+        void mouseDown(const juce::MouseEvent&) override { if (onClick) onClick(); }
+    } display;
+
+    struct MenuLook : public juce::LookAndFeel_V4
+    {
+        MenuLook();
+        juce::Font getPopupMenuFont() override;
+        void drawPopupMenuBackground(juce::Graphics&, int w, int h) override;
+    } menuLook;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WazpEditor)
 };

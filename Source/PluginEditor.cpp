@@ -290,7 +290,8 @@ WazpEditor::WazpEditor(WazpProcessor& p)
 
     panel.addAndMakeVisible(display);
     display.setBounds(layout::presetdisplay.reduced(4.0f).toNearestInt());
-    display.setInterceptsMouseClicks(false, false);
+    display.onClick = [this] { showPresetList(); };
+    display.setMouseCursor(juce::MouseCursor::PointingHandCursor);
     display.text = proc.getPresetDisplayName();
 
     panel.addAndMakeVisible(keys);
@@ -333,6 +334,62 @@ void WazpEditor::timerCallback()
 {
     juce::String t = juce::Time::getMillisecondCounterHiRes() < valueUntil ? valueText : proc.getPresetDisplayName();
     if (t != display.text) { display.text = t; display.repaint(); }
+}
+
+// ---- the full preset list (click the preset display) ----------------------------------------
+WazpEditor::MenuLook::MenuLook()
+{
+    setColour(juce::PopupMenu::backgroundColourId, juce::Colour(0xff0b0c0d));
+    setColour(juce::PopupMenu::textColourId, kYellow);
+    setColour(juce::PopupMenu::headerTextColourId, juce::Colour(0xfffff26c));
+    setColour(juce::PopupMenu::highlightedBackgroundColourId, kYellow);
+    setColour(juce::PopupMenu::highlightedTextColourId, juce::Colour(0xff0b0c0d));
+}
+
+juce::Font WazpEditor::MenuLook::getPopupMenuFont()
+{
+    return juce::Font(juce::FontOptions(juce::Font::getDefaultMonospacedFontName(), 16.0f, juce::Font::bold));
+}
+
+void WazpEditor::MenuLook::drawPopupMenuBackground(juce::Graphics& g, int w, int h)
+{
+    g.fillAll(juce::Colour(0xff0b0c0d));
+    g.setColour(juce::Colour(0xffeec600));
+    g.drawRect(0, 0, w, h, 2);
+}
+
+void WazpEditor::showPresetList()
+{
+    juce::PopupMenu menu;
+    menu.setLookAndFeel(&menuLook);
+    const int numFactory = (int) factoryPresets().size();
+    const int current = proc.getCurrentProgram();
+    auto label = [](int i, const juce::String& name) { return juce::String(i + 1).paddedLeft('0', 3) + "  " + name.toUpperCase(); };
+
+    menu.addSectionHeader("FACTORY PRESETS");
+    for (int i = 0; i < numFactory; ++i)
+        menu.addItem(i + 1, label(i, factoryPresets()[(size_t) i].name), true, i == current);
+
+    auto user = proc.getUserPresets();
+    menu.addSectionHeader("MY PRESETS");
+    if (user.isEmpty())
+        menu.addItem(-1, "(none yet - use SAVE)", false, false);
+    for (int i = 0; i < user.size(); ++i)
+        menu.addItem(numFactory + i + 1, label(numFactory + i, user[i].getFileNameWithoutExtension()), true, numFactory + i == current);
+
+    menu.addSeparator();
+    menu.addItem(10000, "OPEN PRESET FOLDER");
+
+    juce::Component::SafePointer<WazpEditor> safe(this);
+    menu.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(&display).withMinimumWidth(display.getWidth())
+                           .withMaximumNumColumns(1),
+                       [safe](int result)
+                       {
+                           if (safe == nullptr || result <= 0) return;
+                           if (result == 10000) { userPresetFolder().startAsProcess(); return; }
+                           safe->proc.setCurrentProgram(result - 1);
+                           safe->valueUntil = 0;
+                       });
 }
 
 void WazpEditor::savePreset()
