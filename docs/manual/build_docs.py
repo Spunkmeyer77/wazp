@@ -8,7 +8,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 DOCS = HERE.parent
-VERSION = sys.argv[1] if len(sys.argv) > 1 else "1.0.4"
+VERSION = sys.argv[1] if len(sys.argv) > 1 else "1.0.5"
 PANEL = "data:image/jpeg;base64," + base64.b64encode((HERE / "img" / "panel.jpg").read_bytes()).decode()
 
 CSS = """
@@ -147,6 +147,9 @@ and the mod wheel (CC 1, adds pitch modulation from the control oscillator). Vel
 
 
 HISTORY = [
+    ("1.0.5", [
+        "The SYNC arrow is shorter and now stops at the section divider instead of crossing into the oscillator section.",
+    ]),
     ("1.0.4", [
         "Full Q is now stable at every cutoff: it rings very hard on every note instead of blooming into a delayed whistle at high cutoffs.",
         "The preset list is bigger and easier to read.",
