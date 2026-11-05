@@ -175,9 +175,12 @@ void Engine::render(float* out, int n, const Params& p)
 
         // ---- pitch -------------------------------------------------------------------
         glidePitch = glideCoef <= 0.0 ? targetPitch : targetPitch + (glidePitch - targetPitch) * glideCoef;
-        const double basePitch = glidePitch + bend + pitchDepth * lfo;
-        const double f1 = 440.0 * std::pow(2.0, (basePitch - 69.0) / 12.0) * kRange[std::clamp(p.osc1Range, 0, 4)];
-        const double f2 = 440.0 * std::pow(2.0, (basePitch + p.osc2Pitch - 69.0) / 12.0) * kRange[std::clamp(p.osc2Range, 0, 4)];
+        const double basePitch = glidePitch + bend;
+        const double mod = pitchDepth * lfo;
+        const double p1 = basePitch + (p.pitchDest != 2 ? mod : 0.0);
+        const double p2 = basePitch + (p.pitchDest != 0 ? mod : 0.0);
+        const double f1 = 440.0 * std::pow(2.0, (p1 - 69.0) / 12.0) * kRange[std::clamp(p.osc1Range, 0, 4)];
+        const double f2 = 440.0 * std::pow(2.0, (p2 + p.osc2Pitch - 69.0) / 12.0) * kRange[std::clamp(p.osc2Range, 0, 4)];
         const double dt1 = std::min(0.45, f1 / sr), dt2 = std::min(0.45, f2 / sr);
 
         // ---- oscillators -------------------------------------------------------------
@@ -218,7 +221,13 @@ void Engine::render(float* out, int n, const Params& p)
             v1 = 3.0f * std::tanh(v1 * (1.0f / 3.0f));      // only limits the band-pass when it self-oscillates
             s1 = 2.0f * v1 - s1;
             s2 = 2.0f * v2 - s2;
-            return p.filterMode == 0 ? v2 : p.filterMode == 1 ? v1 : in - k * v1 - v2;
+            switch (p.filterMode)
+            {
+                case 0:  return v2;                       // LO
+                case 1:  return v1;                       // BAND
+                case 2:  return in - k * v1 - v2;         // HI
+                default: return in - k * v1;              // NOTCH (low + high)
+            }
         };
         const float in = std::tanh(mix * 1.2f + 0.0005f * nextNoise());   // input drive (+ a whisper of noise so Q can ring by itself)
         float y = svf(svf(in, ic1, ic2, k1), jc1, jc2, k2);

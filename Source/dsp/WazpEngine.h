@@ -29,7 +29,8 @@ struct Params
     int   lfoWave = 0;           // 0 sine, 1 square, 2 noise, 3 random
     float cutoff = 8000.0f;      // Hz
     float resonance = 0.2f;      // 0..1
-    int   filterMode = 0;        // 0 LO, 1 BAND, 2 HI
+    int   filterMode = 0;        // 0 LO, 1 BAND, 2 HI, 3 NOTCH
+    int   pitchDest = 1;         // pitch modulation goes to: 0 osc 1, 1 both, 2 osc 2
     float filterEnv = 0.0f;      // -1..1
     float filterLfo = 0.0f;      // -1..1
     float vcaAttack = 0.0f, vcaDecay = 0.4f, vcaSustain = 0.7f;   // 0..1

@@ -63,7 +63,9 @@ APVTS::ParameterLayout WazpProcessor::createLayout()
     fl("cutoff", "Filter Freq", skewed(20.0f, 20000.0f, 900.0f), 8000.0f, hz);
     fl("resonance", "Q", { 0.0f, 1.0f }, 0.2f, pct);
     l.add(std::make_unique<AudioParameterChoice>(ParameterID { "filterMode", 1 }, "Filter Control",
-                                                 StringArray { "Lo", "Band", "Hi" }, 0));
+                                                 StringArray { "Lo", "Band", "Hi", "Notch" }, 0));
+    l.add(std::make_unique<AudioParameterChoice>(ParameterID { "pitchDest", 1 }, "Pitch Mod Dest",
+                                                 StringArray { "Osc 1", "Both", "Osc 2" }, 1));
     fl("filterEnv", "Filter Env Mod", { -1.0f, 1.0f }, 0.0f, bipolar);
     fl("filterLfo", "Filter Osc Mod", { -1.0f, 1.0f }, 0.0f, bipolar);
 
@@ -108,7 +110,7 @@ void WazpProcessor::readParams(wazp::Params& p) const
     p.osc1Range = i("osc1Range");   p.osc1Width = f("osc1Width");   p.osc1Wave = i("osc1Wave");
     p.osc2Range = i("osc2Range");   p.osc2Pitch = f("osc2Pitch");   p.osc2Wave = i("osc2Wave");
     p.lfoRate = f("lfoRate");       p.lfoPitch = f("lfoPitch");     p.noise = f("noise");   p.lfoWave = i("lfoWave");
-    p.cutoff = f("cutoff");         p.resonance = f("resonance");   p.filterMode = i("filterMode");
+    p.cutoff = f("cutoff");         p.resonance = f("resonance");   p.filterMode = i("filterMode");   p.pitchDest = i("pitchDest");
     p.filterEnv = f("filterEnv");   p.filterLfo = f("filterLfo");
     p.vcaAttack = f("vcaAttack");   p.vcaDecay = f("vcaDecay");     p.vcaSustain = f("vcaSustain");
     p.envAttack = f("envAttack");   p.envDecay = f("envDecay");     p.envDelay = f("envDelay");

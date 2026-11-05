@@ -86,8 +86,9 @@ int main(int argc, char** argv)
     check(allSound, "all factory presets sound at a sane level");
 
     // all wave / filter / lfo combinations stay finite
-    for (int w1 = 0; w1 < 3; ++w1) for (int fm = 0; fm < 3; ++fm) for (int lw = 0; lw < 4; ++lw)
+    for (int w1 = 0; w1 < 3; ++w1) for (int fm = 0; fm < 4; ++fm) for (int lw = 0; lw < 4; ++lw)
     {
+        setParam("pitchDest", (float) ((w1 + lw) % 3));
         setParam("osc1Wave", (float) w1); setParam("filterMode", (float) fm); setParam("lfoWave", (float) lw);
         setParam("resonance", 1.0f); setParam("sync", 1.0f); setParam("filterEnv", 1.0f); setParam("lfoPitch", 1.0f);
         run(10, on(60)); run(1, off(60)); run(5);

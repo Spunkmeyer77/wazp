@@ -41,6 +41,12 @@ inline const std::vector<FactoryPreset>& factoryPresets()
                          {"vcaAttack",0.5f}, {"vcaSustain",1.0f} } },
         { "WOBBLE", { {"osc1Range",1}, {"cutoff",500}, {"resonance",0.6f}, {"filterLfo",0.6f}, {"lfoWave",1}, {"lfoRate",4}, {"vcaSustain",1.0f} } },
         { "SLOW SWELL", { {"vcaAttack",0.8f}, {"envAttack",0.8f}, {"filterEnv",0.5f}, {"cutoff",400}, {"vcaSustain",0.9f}, {"envDelay",0.5f} } },
+        { "BEATING DETUNE", { {"pitchDest",2}, {"lfoPitch",0.12f}, {"lfoRate",0.6f}, {"cutoff",1800}, {"resonance",0.35f},
+                              {"vcaSustain",0.9f}, {"filterEnv",0.3f} } },
+        { "SYNC SWEEP", { {"sync",1}, {"pitchDest",2}, {"osc2Range",3}, {"lfoPitch",0.55f}, {"lfoRate",0.4f}, {"osc1Level",0.35f},
+                          {"cutoff",4000}, {"resonance",0.4f}, {"vcaSustain",0.9f} } },
+        { "NOTCH PHASER", { {"filterMode",3}, {"cutoff",900}, {"resonance",0.75f}, {"filterLfo",0.3f}, {"lfoRate",0.35f},
+                            {"osc2Pitch",0.1f}, {"vcaSustain",1.0f} } },
         { "8-BIT SQUARE", { {"osc1Wave",1}, {"osc1Width",12}, {"osc2Wave",0}, {"cutoff",20000}, {"resonance",0.0f}, {"vcaSustain",0.8f} } },
     };
     return p;

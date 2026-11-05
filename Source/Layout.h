@@ -74,5 +74,7 @@ inline const juce::Rectangle<float> presetsave { 1144.0f, 150.0f, 92.0f, 34.0f }
 inline const juce::Rectangle<float> presetload { 1248.0f, 150.0f, 92.0f, 34.0f };
 inline const juce::Point<float> syncSwitch { 153.0f, 318.0f };   // centre of the 68 x 46 switch cell
 inline const juce::Point<float> holdSwitch { 153.0f, 410.0f };
+inline const juce::Rectangle<float> pitchDestSwitch { 651.0f, 422.0f, 94.0f, 18.0f };   // OSC 1 / BOTH / OSC 2 slide
+inline const float pitchDestX[3] = { 664.0f, 698.0f, 732.0f };
 inline const juce::Rectangle<float> badge { 770.0f, 62.0f, 290.0f, 140.0f };   // WAZP logo -> About
 }

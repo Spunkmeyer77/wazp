@@ -29,6 +29,20 @@ private:
     juce::Image off, on;
 };
 
+// 3-position slide switch (pitch mod destination): click a position or drag the lever
+class SlideSwitch : public juce::Slider
+{
+public:
+    SlideSwitch() : Slider(juce::Slider::LinearHorizontal, juce::Slider::NoTextBox) {}
+    void paint(juce::Graphics&) override;
+    void mouseDown(const juce::MouseEvent& e) override { setFromX(e.position.x); if (onTouched) onTouched(); }
+    void mouseDrag(const juce::MouseEvent& e) override { setFromX(e.position.x); if (onTouched) onTouched(); }
+    void mouseUp(const juce::MouseEvent&) override {}
+    std::function<void()> onTouched;
+private:
+    void setFromX(float x);
+};
+
 class PanelButton : public juce::Button
 {
 public:
@@ -97,6 +111,8 @@ private:
     juce::OwnedArray<wazp::Knob> knobs;
     juce::OwnedArray<juce::AudioProcessorValueTreeState::SliderAttachment> attachments;
     wazp::SyncSwitch sync, hold;
+    wazp::SlideSwitch pitchDest;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> pitchDestAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> syncAttachment, holdAttachment;
     wazp::PanelButton prev { "<" }, next { ">" }, save { "SAVE" }, load { "LOAD" };
     wazp::Keys keys;

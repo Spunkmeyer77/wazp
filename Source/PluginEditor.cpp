@@ -56,6 +56,30 @@ void SyncSwitch::paintButton(juce::Graphics& g, bool, bool)
     g.drawImage(getToggleState() ? on : off, getLocalBounds().toFloat());
 }
 
+// ============================================================================ Slide switch
+void SlideSwitch::setFromX(float x)
+{
+    const float third = (float) getWidth() / 3.0f;
+    setValue(juce::jlimit(0.0, 2.0, (double) (int) (x / third)), juce::sendNotificationSync);
+}
+
+void SlideSwitch::paint(juce::Graphics& g)
+{
+    const int pos = juce::jlimit(0, 2, juce::roundToInt(getValue()));
+    const float cx = layout::pitchDestX[pos] - layout::pitchDestSwitch.getX();
+    auto lever = juce::Rectangle<float>(30.0f, 14.0f).withCentre({ cx, (float) getHeight() * 0.5f });
+    g.setColour(juce::Colours::black.withAlpha(0.5f));
+    g.fillRoundedRectangle(lever.translated(0.0f, 1.5f), 3.5f);
+    juce::ColourGradient grad(juce::Colour(0xfffff36a), lever.getX(), lever.getY(), juce::Colour(0xffe0b400), lever.getX(), lever.getBottom(), false);
+    g.setGradientFill(grad);
+    g.fillRoundedRectangle(lever, 3.5f);
+    g.setColour(juce::Colour(0xffffed70));
+    g.drawRoundedRectangle(lever, 3.5f, 1.0f);
+    g.setColour(juce::Colour(0xff8a6c00).withAlpha(0.7f));
+    for (int i = -1; i <= 1; ++i)                                   // grip lines
+        g.drawVerticalLine(juce::roundToInt(lever.getCentreX() + (float) i * 5.0f), lever.getY() + 3.5f, lever.getBottom() - 3.5f);
+}
+
 // ============================================================================ Panel buttons
 void PanelButton::paintButton(juce::Graphics& g, bool over, bool down)
 {
@@ -228,7 +252,7 @@ const std::vector<KnobDef>& knobDefs()
         { "lfo-wave", "lfoWave", { -45, -13, 36, 57 }, 0 },
         { "filter-frequency", "cutoff", {}, 135 },
         { "resonance", "resonance", {}, 135 },
-        { "filter-mode", "filterMode", { -70, 0, 70 }, 0 },
+        { "filter-mode", "filterMode", { -70, 0, 70, 115 }, 0 },
         { "filter-mod1", "filterLfo", {}, 135 },   // left: control osc -> filter (as on the panel arrows)
         { "filter-mod2", "filterEnv", {}, 135 },   // right: control env -> filter
         { "vca-attack", "vcaAttack", {}, 135 },
@@ -281,6 +305,11 @@ WazpEditor::WazpEditor(WazpProcessor& p)
     hold.setBounds(juce::Rectangle<float>(68.0f, 46.0f).withCentre(layout::holdSwitch).toNearestInt());
     holdAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(proc.apvts, "hold", hold);
     hold.onClick = [this] { showValue("hold"); };
+
+    panel.addAndMakeVisible(pitchDest);
+    pitchDest.setBounds(layout::pitchDestSwitch.toNearestInt());
+    pitchDestAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(proc.apvts, "pitchDest", pitchDest);
+    pitchDest.onTouched = [this] { showValue("pitchDest"); };
 
     for (auto [b, r] : { std::pair { &prev, layout::presetprev }, { &next, layout::presetnext },
                           { &save, layout::presetsave }, { &load, layout::presetload } })

@@ -107,12 +107,13 @@ the preset window shows its name and value. The window can be resized from the b
     d.page("<h2>The Panel (continued)</h2><h3>Control Osc.</h3>" + rows([
         ("FREQ.", "Speed of the control oscillator, 0.05 Hz up to 1 kHz. It restarts with every new note. Above about 30 Hz it stops being a wobble and becomes audio-rate modulation: metallic, growling, FM-like tones."),
         ("PITCH MOD.", "How much the control oscillator moves the pitch of both oscillators (up to +/- 12 semitones). Vibrato at low settings, sirens and bleeps higher up."),
+        ("OSC 1 / BOTH / OSC 2", "Slide switch under PITCH MOD.: chooses which oscillator the pitch modulation (control oscillator and mod wheel) moves. BOTH moves both together. OSC 1 or OSC 2 moves only one, so it beats and drifts against the steady one: moving detune, chorus-like beating and, with SYNC on and OSC 2 selected, sweeping sync tones."),
         ("NOISE SIGNAL", "Level of white noise in the mixer (0 - 10). Use it alone with the filter for wind, surf and percussion."),
         ("Wave", "Shape of the control oscillator: sine, square, noise (smoothed random movement) and RND (a new random value every cycle: sample and hold)."),
     ]) + "<h3>Filter</h3>" + rows([
         ("FREQ.", "Filter cutoff frequency, 20 Hz to 20 kHz."),
         ("Q", "Resonance. The filter is two stages in series, so it rings hard and screams. At the top it sits right at the edge of self-oscillation: a piercing, singing resonance on every note, at any cutoff."),
-        ("CONTROL", "Filter type: LO (low-pass), BAND (band-pass) or HI (high-pass)."),
+        ("CONTROL", "Filter type: LO (low-pass), BAND (band-pass), HI (high-pass) or NOTCH (cuts a band around the cutoff and lets everything else through; hollow, phasey tones, and a phaser-like effect when swept by the control oscillator)."),
         ("Left -/+ knob", "Amount of the control oscillator on the cutoff (wah, wobble, random filter steps), up to +/- 8 kHz. With a low FREQ. setting a deep amount can close the filter completely on the low part of the cycle, giving a gated, chopped sound. Centre = no modulation."),
         ("Right -/+ knob", "Amount of the CONTROL ENV. on the cutoff. Right of centre opens the filter, left of centre closes it (inverted envelope)."),
     ]) + "<h3>Envelope Generators</h3>" + rows([
@@ -128,8 +129,8 @@ the preset window shows its name and value. The window can be resized from the b
         ("Preset display", "Click the name to open the full preset list: all factory presets, then your own presets (MY PRESETS). The current one is ticked; click any name to load it. OPEN PRESET FOLDER at the bottom shows your presets in Finder / Explorer."),
         ("SAVE", "Saves the current sound as a .wazp file. By default it goes to <i>Documents / Ticco Ross / WAZP / Presets</i>; presets saved there appear in the &lt; &gt; list."),
         ("LOAD", "Opens any .wazp file."),
-    ]) + """<p>WAZP comes with 16 factory presets: INIT, BUZZ BASS, WASP STING, SYNC SCREAM, REPEAT PERC, DREXY ACID, NOISE WIND,
-SIREN, RANDOM BLEEPS, HOLLOW LEAD, HIGH PASS FIZZ, BAND PLUCK, SUB DRONE, WOBBLE, SLOW SWELL and 8-BIT SQUARE.
+    ]) + """<p>WAZP comes with 19 factory presets: INIT, BUZZ BASS, WASP STING, SYNC SCREAM, REPEAT PERC, DREXY ACID, NOISE WIND,
+SIREN, RANDOM BLEEPS, HOLLOW LEAD, HIGH PASS FIZZ, BAND PLUCK, SUB DRONE, WOBBLE, SLOW SWELL, BEATING DETUNE, SYNC SWEEP, NOTCH PHASER and 8-BIT SQUARE.
 The presets also appear in your DAW's program list.</p>
 <div class="note">Your DAW saves the complete state (every knob and the preset name) with the project, so you don't need to save a preset to keep a sound in a song.</div>
 <h2 style="margin-top:8mm">Automation &amp; MIDI</h2>
@@ -149,6 +150,9 @@ and the mod wheel (CC 1, adds pitch modulation from the control oscillator). Vel
 
 HISTORY = [
     ("1.0.5", [
+        "New OSC 1 / BOTH / OSC 2 switch under PITCH MOD.: choose which oscillator the pitch modulation moves.",
+        "New NOTCH mode on the filter CONTROL knob.",
+        "Three new factory presets: BEATING DETUNE, SYNC SWEEP and NOTCH PHASER.",
         "New HOLD switch in the KEYBOARD section: the last note keeps sounding after you release the key.",
         "The SYNC arrow is shorter and now stops at the section divider instead of crossing into the oscillator section.",
     ]),
