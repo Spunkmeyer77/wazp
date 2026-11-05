@@ -53,7 +53,7 @@ APVTS::ParameterLayout WazpProcessor::createLayout()
     fl("osc2Pitch", "Osc 2 Pitch", { -12.0f, 12.0f }, 0.0f, [](float v, int) { return (v > 0 ? "+" : "") + String(v, 2) + " st"; });
     l.add(std::make_unique<AudioParameterChoice>(ParameterID { "osc2Wave", 1 }, "Osc 2 Wave", waves, 2));
 
-    fl("lfoRate", "Control Osc Freq", skewed(0.05f, 50.0f, 3.0f), 2.0f, hz);
+    fl("lfoRate", "Control Osc Freq", skewed(0.05f, 1000.0f, 6.0f), 2.0f, hz);
     fl("lfoPitch", "Pitch Mod", { 0.0f, 1.0f }, 0.0f, pct);
     fl("noise", "Noise Signal", { 0.0f, 1.0f }, 0.0f, tenScale);
     l.add(std::make_unique<AudioParameterChoice>(ParameterID { "lfoWave", 1 }, "Control Osc Wave",

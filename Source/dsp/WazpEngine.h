@@ -114,7 +114,9 @@ private:
     double lfoPhase = 0.0;
     float lfoHeld = 0.0f, lfoNoiseSmooth = 0.0f;
     float bend = 0.0f, modWheel = 0.0f;
-    float ic1 = 0.0f, ic2 = 0.0f;       // SVF state
+    float ic1 = 0.0f, ic2 = 0.0f, jc1 = 0.0f, jc2 = 0.0f;   // two cascaded SVF stages
+    float pink[3] {};
+    float nextPink();
     float smoothCutoff = 8000.0f, smoothGain = 0.5f, dcX = 0.0f, dcY = 0.0f;
     uint32_t rng = 0x12345678u;
     bool pendingTrigger = false, pendingRelease = false;

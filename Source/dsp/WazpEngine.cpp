@@ -28,7 +28,7 @@ void Engine::reset()
     stackSize = 0;
     currentNote = -1;
     phase1 = phase2 = lfoPhase = 0.0;
-    ic1 = ic2 = 0.0f;
+    ic1 = ic2 = jc1 = jc2 = 0.0f;
     dcX = dcY = 0.0f;
     vcaEnv.reset();
     ctrlEnv.reset();
@@ -46,6 +46,7 @@ void Engine::noteOn(int note)
     currentNote = note;
     targetPitch = note;
     pendingTrigger = true;
+    lfoPhase = 0.0;                            // the control osc restarts on every note, like the original
 }
 
 void Engine::noteOff(int note)
@@ -80,6 +81,16 @@ float Engine::polyBlep(double t, double dt) const
     return 0.0f;
 }
 
+float Engine::nextPink()
+{
+    // cheap 3-pole pink-ish noise (Paul Kellet economy)
+    const float w = nextNoise();
+    pink[0] = 0.99765f * pink[0] + w * 0.0990460f;
+    pink[1] = 0.96300f * pink[1] + w * 0.2965164f;
+    pink[2] = 0.57000f * pink[2] + w * 1.0526913f;
+    return (pink[0] + pink[1] + pink[2] + w * 0.1848f) * 0.25f;
+}
+
 float Engine::nextNoise()
 {
     rng = rng * 1664525u + 1013904223u;
@@ -109,9 +120,13 @@ void Engine::render(float* out, int n, const Params& p)
     const float pitchDepth = 12.0f * (p.lfoPitch * p.lfoPitch) + 6.0f * modWheel;
     // filter mod amounts: exponential curve (sign * (e^3|x| - 1)/(e^3 - 1))
     auto expAmt = [](float x) { float a = std::abs(x); float c = (std::exp(a * 3.0f) - 1.0f) / (std::exp(3.0f) - 1.0f); return x < 0 ? -c : c; };
-    const float envOct = 7.0f * expAmt(p.filterEnv);
-    const float lfoOct = 4.0f * expAmt(p.filterLfo);
-    const float k = 2.0f - 1.97f * std::pow(std::clamp(p.resonance, 0.0f, 1.0f), 0.8f);
+    // like the original: cutoff + source * amount * 2000 Hz, amount up to +-4 -> +-8000 Hz (linear Hz)
+    const float envHz = 8000.0f * expAmt(p.filterEnv);
+    const float lfoHz = 8000.0f * expAmt(p.filterLfo);
+    // two cascaded state-variable filters: stage 1 Q 0..1 (self-oscillates at the top), stage 2 Q 0..0.55
+    const float res = std::clamp(p.resonance, 0.0f, 1.0f);
+    const float k1 = 2.0f * (1.0f - res) - 0.06f * res * res * res * res;   // tips just past self-oscillation at full Q
+    const float k2 = 2.0f * (1.0f - 0.55f * res);
 
     if (pendingTrigger)
     {
@@ -132,8 +147,8 @@ void Engine::render(float* out, int n, const Params& p)
         {
             case 0: lfo = (float) std::sin(kTwoPi * lfoPhase); break;
             case 1: lfo = lfoPhase < 0.5 ? 1.0f : -1.0f; break;
-            case 2: lfoNoiseSmooth += 0.02f * (nextNoise() - lfoNoiseSmooth); lfo = std::clamp(lfoNoiseSmooth * 4.0f, -1.0f, 1.0f); break;
-            default: if (wrapped) lfoHeld = nextNoise(); lfo = lfoHeld; break;
+            case 2: lfo = std::clamp(nextPink() * 2.0f, -1.0f, 1.0f); break;                 // raw pink noise
+            default: { float pn = nextPink(); if (wrapped) lfoHeld = std::clamp(pn * 2.0f, -1.0f, 1.0f); lfo = lfoHeld; break; }   // sample & hold
         }
 
         // ---- envelopes ---------------------------------------------------------------
@@ -171,23 +186,29 @@ void Engine::render(float* out, int n, const Params& p)
 
         float mix = 0.5f * (o1 * gain1 + o2 * gain2) + 0.6f * nextNoise() * gainN;
 
-        // ---- filter (TPT state variable, saturating) ----------------------------------
-        float cutoff = p.cutoff * std::exp2(envOct * cenv + lfoOct * lfo);
-        smoothCutoff += 0.01f * (cutoff - smoothCutoff);
+        // ---- filter: drive -> SVF (full Q) -> SVF (Q x 0.55), same mode on both ----------------
+        float cutoff = p.cutoff + envHz * cenv + lfoHz * lfo;
+        smoothCutoff += 0.05f * (cutoff - smoothCutoff);
         const float fc = std::clamp(smoothCutoff, 20.0f, (float) (sr * 0.45));
         const float g = std::tan(3.14159265f * fc / (float) sr);
-        const float a1 = 1.0f / (1.0f + g * (g + k));
-        const float in = std::tanh(mix * 1.3f);
-        const float v3 = in - ic2;
-        const float v1 = a1 * ic1 + g * a1 * v3;
-        const float v2 = ic2 + g * v1;
-        ic1 = std::tanh(2.0f * v1 - ic1);
-        ic2 = 2.0f * v2 - ic2;
-        float y = p.filterMode == 0 ? v2 : p.filterMode == 1 ? v1 * k : in - k * v1 - v2;
+        auto svf = [&](float in, float& s1, float& s2, float k)
+        {
+            const float a1 = 1.0f / (1.0f + g * (g + k));
+            const float v3 = in - s2;
+            float v1 = a1 * s1 + g * a1 * v3;
+            const float v2 = s2 + g * v1;
+            v1 = 3.0f * std::tanh(v1 * (1.0f / 3.0f));      // only limits the band-pass when it self-oscillates
+            s1 = 2.0f * v1 - s1;
+            s2 = 2.0f * v2 - s2;
+            return p.filterMode == 0 ? v2 : p.filterMode == 1 ? v1 : in - k * v1 - v2;
+        };
+        const float in = std::tanh(mix * 1.2f + 0.0005f * nextNoise());   // input drive (+ a whisper of noise so Q can ring by itself)
+        float y = svf(svf(in, ic1, ic2, k1), jc1, jc2, k2);
+        y = std::tanh(y * 0.9f) * 2.2f;                                      // output drive like the original
 
         // ---- VCA + output ------------------------------------------------------------
         smoothGain += 0.002f * (volTarget - smoothGain);
-        y = std::tanh(y * vca * 1.2f) * smoothGain;
+        y = y * vca * 0.5f * smoothGain;
         // DC blocker
         const float dcOut = y - dcX + 0.995f * dcY;
         dcX = y; dcY = dcOut;

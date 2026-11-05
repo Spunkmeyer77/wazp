@@ -8,7 +8,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 DOCS = HERE.parent
-VERSION = sys.argv[1] if len(sys.argv) > 1 else "1.0.2"
+VERSION = sys.argv[1] if len(sys.argv) > 1 else "1.0.3"
 PANEL = "data:image/jpeg;base64," + base64.b64encode((HERE / "img" / "panel.jpg").read_bytes()).decode()
 
 CSS = """
@@ -104,16 +104,16 @@ the preset window shows its name and value. The window can be resized from the b
     ]))
 
     d.page("<h2>The Panel (continued)</h2><h3>Control Osc.</h3>" + rows([
-        ("FREQ.", "Speed of the control oscillator (LFO), 0.05 Hz to 50 Hz."),
+        ("FREQ.", "Speed of the control oscillator, 0.05 Hz up to 1 kHz. It restarts with every new note. Above about 30 Hz it stops being a wobble and becomes audio-rate modulation: metallic, growling, FM-like tones."),
         ("PITCH MOD.", "How much the control oscillator moves the pitch of both oscillators (up to +/- 12 semitones). Vibrato at low settings, sirens and bleeps higher up."),
         ("NOISE SIGNAL", "Level of white noise in the mixer (0 - 10). Use it alone with the filter for wind, surf and percussion."),
         ("Wave", "Shape of the control oscillator: sine, square, noise (smoothed random movement) and RND (a new random value every cycle: sample and hold)."),
     ]) + "<h3>Filter</h3>" + rows([
         ("FREQ.", "Filter cutoff frequency, 20 Hz to 20 kHz."),
-        ("Q", "Resonance. High settings make the filter ring and whistle; at the top it almost self-oscillates."),
+        ("Q", "Resonance. The filter is two stages in series, so it rings hard and screams; at the top it self-oscillates and whistles by itself, even with the oscillators off."),
         ("CONTROL", "Filter type: LO (low-pass), BAND (band-pass) or HI (high-pass)."),
         ("Left -/+ knob", "Amount of the CONTROL ENV. on the cutoff. Right of centre opens the filter, left of centre closes it (inverted envelope)."),
-        ("Right -/+ knob", "Amount of the control oscillator on the cutoff (wah, wobble, random filter steps). Centre = no modulation."),
+        ("Right -/+ knob", "Amount of the control oscillator on the cutoff (wah, wobble, random filter steps), up to +/- 8 kHz. With a low FREQ. setting a deep amount can close the filter completely on the low part of the cycle, giving a gated, chopped sound. Centre = no modulation."),
     ]) + "<h3>Envelope Generators</h3>" + rows([
         ("VCA ENV. ATTACK / DECAY", "How fast the sound rises when you press a key and how fast it falls to the sustain level. DECAY also sets the release time after you let go."),
         ("REPEAT / SUSTAIN LEVEL", "Fully left (REPEAT) the envelope keeps re-triggering itself while a key is held: automatic repeating notes. Turned right, it sets the level the sound holds at while the key is down."),
@@ -146,6 +146,13 @@ and the mod wheel (CC 1, adds pitch modulation from the control oscillator). Vel
 
 
 HISTORY = [
+    ("1.0.3", [
+        "The control oscillator now sweeps the filter much harder, as on the original design (up to +/- 8 kHz).",
+        "Control oscillator range extended to 1 kHz for audio-rate filter and pitch modulation; it restarts on every note.",
+        "NOISE and RND control-oscillator shapes now use raw pink noise.",
+        "New two-stage filter: much stronger resonance that screams and self-oscillates at full Q.",
+        "Output drive stage after the filter for a louder, grittier sound.",
+    ]),
     ("1.0.2", [
         "The manual now has a clear macOS security warning section explaining how to open the installer.",
         "Documentation and repository text updated.",
