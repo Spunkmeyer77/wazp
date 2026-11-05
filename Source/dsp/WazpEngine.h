@@ -97,6 +97,8 @@ public:
     void allNotesOff();
     void setPitchBend(float semis) { bend = semis; }
     void setModWheel(float v) { modWheel = v; }
+    // HOLD: the last note keeps sounding after its key is released, until a new note or HOLD off
+    void setHold(bool on);
     // renders mono into out[0..n)
     void render(float* out, int n, const Params& p);
     bool isActive() const { return vcaEnv.active(); }
@@ -120,6 +122,7 @@ private:
     float smoothCutoff = 8000.0f, smoothGain = 0.5f, dcX = 0.0f, dcY = 0.0f;
     uint32_t rng = 0x12345678u;
     bool pendingTrigger = false, pendingRelease = false;
+    bool hold = false, heldByHold = false;
     Envelope vcaEnv, ctrlEnv;
 };
 

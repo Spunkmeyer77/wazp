@@ -277,6 +277,11 @@ WazpEditor::WazpEditor(WazpProcessor& p)
     syncAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(proc.apvts, "sync", sync);
     sync.onClick = [this] { showValue("sync"); };
 
+    panel.addAndMakeVisible(hold);
+    hold.setBounds(juce::Rectangle<float>(68.0f, 46.0f).withCentre(layout::holdSwitch).toNearestInt());
+    holdAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(proc.apvts, "hold", hold);
+    hold.onClick = [this] { showValue("hold"); };
+
     for (auto [b, r] : { std::pair { &prev, layout::presetprev }, { &next, layout::presetnext },
                           { &save, layout::presetsave }, { &load, layout::presetload } })
     {

@@ -91,6 +91,7 @@ If macOS still blocks it, go to <b>System Settings &rarr; Privacy &amp; Security
 the preset window shows its name and value. The window can be resized from the bottom-right corner.</p>
 <h3>Keyboard</h3>""" + rows([
         ("SYNC", "Hard-syncs oscillator 2 to oscillator 1. Set oscillator 2 higher than oscillator 1 (range or PITCH) and sweep PITCH for the classic tearing sync sound."),
+        ("HOLD", "Keeps the last note sounding after you let go of the key. Playing a new note replaces it; switching HOLD off releases it. Great with the REPEAT envelopes for self-playing patterns."),
         ("GLIDE", "Portamento: how long the pitch takes to slide to a new note. Fully left = off, up to about 2 seconds."),
         ("Keys", "The on-panel keyboard is playable with the mouse (C3 - C5) and lights up with incoming MIDI notes. MIDI pitch bend (+/- 2 semitones) and the mod wheel (adds pitch modulation) also work."),
     ]) + "<h3>Oscillators</h3>" + rows([
@@ -148,6 +149,7 @@ and the mod wheel (CC 1, adds pitch modulation from the control oscillator). Vel
 
 HISTORY = [
     ("1.0.5", [
+        "New HOLD switch in the KEYBOARD section: the last note keeps sounding after you release the key.",
         "The SYNC arrow is shorter and now stops at the section divider instead of crossing into the oscillator section.",
     ]),
     ("1.0.4", [

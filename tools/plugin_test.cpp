@@ -55,6 +55,17 @@ int main(int argc, char** argv)
     float tail = 0.0f; for (size_t i = rec.size() - 2000; i < rec.size(); ++i) tail = std::max(tail, std::abs(rec[i]));
     check(tail < 1e-3f, "note releases to silence");
 
+    // HOLD keeps the note after key up, releases when switched off
+    {
+        setParam("hold", 1.0f);
+        run(40, on(50)); run(1, off(50));
+        float held = run(80);
+        setParam("hold", 0.0f);
+        run(400);
+        float tail2 = 0.0f; for (size_t i = rec.size() - 2000; i < rec.size(); ++i) tail2 = std::max(tail2, std::abs(rec[i]));
+        check(held > 0.05f && tail2 < 1e-3f, "HOLD sustains after key up and releases when switched off");
+    }
+
     // every factory preset plays a phrase
     const int nf = (int) wazp::factoryPresets().size();
     bool allSound = true;

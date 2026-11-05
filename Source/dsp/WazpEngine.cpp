@@ -41,6 +41,7 @@ void Engine::noteOn(int note)
         if (stack[(size_t) i] == note) { std::copy(stack.begin() + i + 1, stack.begin() + stackSize, stack.begin() + i); --stackSize; break; }
     if (stackSize < (int) stack.size()) stack[(size_t) stackSize++] = note;
 
+    heldByHold = false;
     if (currentNote < 0 && !vcaEnv.active())
         glidePitch = note;                     // first note after silence: no glide from an old pitch
     currentNote = note;
@@ -59,6 +60,10 @@ void Engine::noteOff(int note)
         int prev = stack[(size_t) stackSize - 1];
         if (prev != currentNote) { currentNote = prev; targetPitch = prev; }   // fall back legato
     }
+    else if (hold)
+    {
+        heldByHold = true;                     // keep sounding; currentNote stays so glide still works
+    }
     else
     {
         currentNote = -1;
@@ -66,9 +71,22 @@ void Engine::noteOff(int note)
     }
 }
 
+void Engine::setHold(bool on)
+{
+    if (on == hold) return;
+    hold = on;
+    if (!on && heldByHold && stackSize == 0)
+    {
+        currentNote = -1;
+        pendingRelease = true;
+    }
+    if (!on) heldByHold = false;
+}
+
 void Engine::allNotesOff()
 {
     stackSize = 0;
+    heldByHold = false;
     currentNote = -1;
     vcaEnv.release();
     ctrlEnv.release();

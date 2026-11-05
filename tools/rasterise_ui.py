@@ -44,10 +44,11 @@ def main():
         layout["knobs"][k] = {"x": float(m.group(1)), "y": float(m.group(2)), "s": float(m.group(3) or 1)}
         g.remove(list(g)[-1])                      # the pointer line (last element of every knob)
 
-    sw = by_id["switch_sync"]
-    for c in list(sw):                          # keep the SYNC / OFF / ON labels, drop the switch graphic
-        if not c.tag.endswith("text"):
-            sw.remove(c)
+    for sid in ("switch_sync", "switch_hold"):
+        sw = by_id[sid]
+        for c in list(sw):                      # keep the SYNC / HOLD / OFF / ON labels, drop the switch graphic
+            if not c.tag.endswith("text"):
+                sw.remove(c)
     name = by_id["preset_name"]
     parent[name].remove(name)
 

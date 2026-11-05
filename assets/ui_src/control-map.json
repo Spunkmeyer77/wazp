@@ -20,6 +20,21 @@
       "default_state": "off"
     },
     {
+      "id": "hold",
+      "type": "switch",
+      "center": [
+        153,
+        410
+      ],
+      "label": "HOLD",
+      "svg_id": "switch_hold",
+      "states": [
+        "off",
+        "on"
+      ],
+      "default_state": "off"
+    },
+    {
       "id": "glide",
       "center": [
         153,

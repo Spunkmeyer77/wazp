@@ -96,8 +96,8 @@ private:
     Panel panel;
     juce::OwnedArray<wazp::Knob> knobs;
     juce::OwnedArray<juce::AudioProcessorValueTreeState::SliderAttachment> attachments;
-    wazp::SyncSwitch sync;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> syncAttachment;
+    wazp::SyncSwitch sync, hold;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> syncAttachment, holdAttachment;
     wazp::PanelButton prev { "<" }, next { ">" }, save { "SAVE" }, load { "LOAD" };
     wazp::Keys keys;
     wazp::AboutOverlay about;

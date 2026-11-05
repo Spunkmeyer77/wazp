@@ -45,6 +45,7 @@ APVTS::ParameterLayout WazpProcessor::createLayout()
 
     fl("glide", "Glide", { 0.0f, 1.0f }, 0.0f, [](float v, int) { return v <= 0.001f ? String("OFF") : timeText(v, 0.005, 2.0); });
     l.add(std::make_unique<AudioParameterBool>(ParameterID { "sync", 1 }, "Sync", false));
+    l.add(std::make_unique<AudioParameterBool>(ParameterID { "hold", 1 }, "Hold", false));
 
     l.add(std::make_unique<AudioParameterChoice>(ParameterID { "osc1Range", 1 }, "Osc 1 Range", ranges, 2));
     fl("osc1Width", "Osc 1 Width", { 10.0f, 90.0f }, 50.0f, [](float v, int) { return String(roundToInt(v)) + " %"; });
@@ -122,6 +123,7 @@ void WazpProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuf
 
     wazp::Params p;
     readParams(p);
+    engine.setHold(apvts.getRawParameterValue("hold")->load() > 0.5f);
     if ((int) mono.size() < n) mono.resize((size_t) n);
 
     int pos = 0;
