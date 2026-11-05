@@ -8,7 +8,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 DOCS = HERE.parent
-VERSION = sys.argv[1] if len(sys.argv) > 1 else "1.0.0"
+VERSION = sys.argv[1] if len(sys.argv) > 1 else "1.0.1"
 PANEL = "data:image/jpeg;base64," + base64.b64encode((HERE / "img" / "panel.jpg").read_bytes()).decode()
 
 CSS = """
@@ -145,6 +145,10 @@ and the mod wheel (CC 1, adds pitch modulation from the control oscillator). Vel
 
 
 HISTORY = [
+    ("1.0.1", [
+        "The SYNC, OFF and ON labels are back on the panel next to the sync switch.",
+        "The preset window shows the preset name as soon as the plug-in opens.",
+    ]),
     ("1.0.0", [
         "First release of WAZP as an AU / VST3 / LV2 plug-in and standalone app for macOS, Windows and Linux, rebuilt from the WOSP Max for Live device.",
         "Two oscillators with 32' - 2' ranges, OFF / pulse / sawtooth, pulse width 10 - 90 % and oscillator 2 pitch.",
