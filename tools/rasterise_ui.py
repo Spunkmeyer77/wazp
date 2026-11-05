@@ -45,7 +45,9 @@ def main():
         g.remove(list(g)[-1])                      # the pointer line (last element of every knob)
 
     sw = by_id["switch_sync"]
-    parent[sw].remove(sw)
+    for c in list(sw):                          # keep the SYNC / OFF / ON labels, drop the switch graphic
+        if not c.tag.endswith("text"):
+            sw.remove(c)
     name = by_id["preset_name"]
     parent[name].remove(name)
 

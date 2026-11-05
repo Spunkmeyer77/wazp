@@ -291,6 +291,7 @@ WazpEditor::WazpEditor(WazpProcessor& p)
     panel.addAndMakeVisible(display);
     display.setBounds(layout::presetdisplay.reduced(4.0f).toNearestInt());
     display.setInterceptsMouseClicks(false, false);
+    display.text = proc.getPresetDisplayName();
 
     panel.addAndMakeVisible(keys);
     keys.setBounds(0, 0, (int) layout::panelW, (int) layout::panelH);
