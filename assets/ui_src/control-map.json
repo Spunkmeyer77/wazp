@@ -1,0 +1,382 @@
+{
+  "canvas": {
+    "width": 1536,
+    "height": 1024
+  },
+  "controls": [
+    {
+      "id": "sync",
+      "type": "switch",
+      "center": [
+        153,
+        318
+      ],
+      "label": "SYNC",
+      "svg_id": "switch_sync",
+      "states": [
+        "off",
+        "on"
+      ],
+      "default_state": "off"
+    },
+    {
+      "id": "glide",
+      "center": [
+        153,
+        519
+      ],
+      "preview_angle_degrees": 8,
+      "label": "GLIDE",
+      "type": "knob",
+      "svg_id": "glide"
+    },
+    {
+      "id": "osc1-range",
+      "center": [
+        261,
+        326
+      ],
+      "preview_angle_degrees": 0,
+      "label": "FT.",
+      "type": "knob",
+      "svg_id": "osc1-range"
+    },
+    {
+      "id": "osc1-width",
+      "center": [
+        365,
+        326
+      ],
+      "preview_angle_degrees": -25,
+      "label": "WIDTH %",
+      "type": "knob",
+      "svg_id": "osc1-width"
+    },
+    {
+      "id": "osc1-wave",
+      "center": [
+        477,
+        326
+      ],
+      "preview_angle_degrees": 0,
+      "label": "",
+      "type": "knob",
+      "svg_id": "osc1-wave"
+    },
+    {
+      "id": "osc2-range",
+      "center": [
+        261,
+        519
+      ],
+      "preview_angle_degrees": 0,
+      "label": "FT.",
+      "type": "knob",
+      "svg_id": "osc2-range"
+    },
+    {
+      "id": "osc2-pitch",
+      "center": [
+        365,
+        519
+      ],
+      "preview_angle_degrees": 55,
+      "label": "PITCH",
+      "type": "knob",
+      "svg_id": "osc2-pitch"
+    },
+    {
+      "id": "osc2-wave",
+      "center": [
+        477,
+        519
+      ],
+      "preview_angle_degrees": 0,
+      "label": "",
+      "type": "knob",
+      "svg_id": "osc2-wave"
+    },
+    {
+      "id": "lfo-frequency",
+      "center": [
+        591,
+        318
+      ],
+      "preview_angle_degrees": -90,
+      "label": "FREQ.",
+      "type": "knob",
+      "svg_id": "lfo-frequency"
+    },
+    {
+      "id": "pitch-mod",
+      "center": [
+        698,
+        318
+      ],
+      "preview_angle_degrees": -90,
+      "label": "PITCH",
+      "type": "knob",
+      "svg_id": "pitch-mod"
+    },
+    {
+      "id": "noise",
+      "center": [
+        591,
+        519
+      ],
+      "preview_angle_degrees": -130,
+      "label": "NOISE",
+      "type": "knob",
+      "svg_id": "noise"
+    },
+    {
+      "id": "lfo-wave",
+      "center": [
+        698,
+        519
+      ],
+      "preview_angle_degrees": -35,
+      "label": "",
+      "type": "knob",
+      "svg_id": "lfo-wave"
+    },
+    {
+      "id": "filter-frequency",
+      "center": [
+        819,
+        318
+      ],
+      "preview_angle_degrees": 0,
+      "label": "FREQ.",
+      "type": "knob",
+      "svg_id": "filter-frequency"
+    },
+    {
+      "id": "resonance",
+      "center": [
+        925,
+        318
+      ],
+      "preview_angle_degrees": -140,
+      "label": "Q",
+      "type": "knob",
+      "svg_id": "resonance"
+    },
+    {
+      "id": "filter-mode",
+      "center": [
+        870,
+        415
+      ],
+      "preview_angle_degrees": 0,
+      "label": "CONTROL",
+      "type": "knob",
+      "svg_id": "filter-mode"
+    },
+    {
+      "id": "filter-mod1",
+      "center": [
+        819,
+        519
+      ],
+      "preview_angle_degrees": 0,
+      "label": "",
+      "type": "knob",
+      "svg_id": "filter-mod1"
+    },
+    {
+      "id": "filter-mod2",
+      "center": [
+        925,
+        519
+      ],
+      "preview_angle_degrees": 0,
+      "label": "",
+      "type": "knob",
+      "svg_id": "filter-mod2"
+    },
+    {
+      "id": "vca-attack",
+      "center": [
+        1045,
+        318
+      ],
+      "preview_angle_degrees": -135,
+      "label": "ATTACK",
+      "type": "knob",
+      "svg_id": "vca-attack"
+    },
+    {
+      "id": "vca-decay",
+      "center": [
+        1157,
+        318
+      ],
+      "preview_angle_degrees": 55,
+      "label": "DECAY",
+      "type": "knob",
+      "svg_id": "vca-decay"
+    },
+    {
+      "id": "vca-sustain",
+      "center": [
+        1268,
+        318
+      ],
+      "preview_angle_degrees": 130,
+      "label": "",
+      "type": "knob",
+      "svg_id": "vca-sustain"
+    },
+    {
+      "id": "env-attack",
+      "center": [
+        1045,
+        519
+      ],
+      "preview_angle_degrees": -35,
+      "label": "ATTACK",
+      "type": "knob",
+      "svg_id": "env-attack"
+    },
+    {
+      "id": "env-decay",
+      "center": [
+        1157,
+        519
+      ],
+      "preview_angle_degrees": -20,
+      "label": "DECAY",
+      "type": "knob",
+      "svg_id": "env-decay"
+    },
+    {
+      "id": "env-delay",
+      "center": [
+        1268,
+        519
+      ],
+      "preview_angle_degrees": 0,
+      "label": "",
+      "type": "knob",
+      "svg_id": "env-delay"
+    },
+    {
+      "id": "volume",
+      "center": [
+        1382,
+        318
+      ],
+      "preview_angle_degrees": 0,
+      "label": "VOLUME",
+      "type": "knob",
+      "svg_id": "volume"
+    },
+    {
+      "id": "osc1-level",
+      "type": "knob",
+      "svg_id": "knob_osc1_level",
+      "center": [
+        1382,
+        453
+      ],
+      "label": "OSC 1",
+      "preview_angle_degrees": -130,
+      "minimum": 0,
+      "maximum": 10
+    },
+    {
+      "id": "osc2-level",
+      "type": "knob",
+      "svg_id": "knob_osc2_level",
+      "center": [
+        1382,
+        544
+      ],
+      "label": "OSC 2",
+      "preview_angle_degrees": -130,
+      "minimum": 0,
+      "maximum": 10
+    },
+    {
+      "id": "preset_display",
+      "type": "display",
+      "svg_id": "preset_display",
+      "label": "001  INIT",
+      "center": [
+        1242.0,
+        109.5
+      ],
+      "bbox": {
+        "x": 1125,
+        "y": 84,
+        "width": 234,
+        "height": 51
+      }
+    },
+    {
+      "id": "preset_prev",
+      "type": "button",
+      "svg_id": "preset_prev",
+      "label": "<",
+      "center": [
+        1099.0,
+        109.5
+      ],
+      "bbox": {
+        "x": 1081,
+        "y": 84,
+        "width": 36,
+        "height": 51
+      }
+    },
+    {
+      "id": "preset_next",
+      "type": "button",
+      "svg_id": "preset_next",
+      "label": ">",
+      "center": [
+        1385.0,
+        109.5
+      ],
+      "bbox": {
+        "x": 1367,
+        "y": 84,
+        "width": 36,
+        "height": 51
+      }
+    },
+    {
+      "id": "preset_save",
+      "type": "button",
+      "svg_id": "preset_save",
+      "label": "SAVE",
+      "center": [
+        1190.0,
+        167.0
+      ],
+      "bbox": {
+        "x": 1144,
+        "y": 150,
+        "width": 92,
+        "height": 34
+      }
+    },
+    {
+      "id": "preset_load",
+      "type": "button",
+      "svg_id": "preset_load",
+      "label": "LOAD",
+      "center": [
+        1294.0,
+        167.0
+      ],
+      "bbox": {
+        "x": 1248,
+        "y": 150,
+        "width": 92,
+        "height": 34
+      }
+    }
+  ]
+}
