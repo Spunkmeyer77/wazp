@@ -1,5 +1,6 @@
 #include "PluginEditor.h"
 #include "Layout.h"
+#include "TempoSync.h"
 #include "BinaryData.h"
 
 using namespace wazp;
@@ -36,11 +37,6 @@ void Knob::paint(juce::Graphics& g)
     const juce::Point<float> dir { std::sin(rad), -std::cos(rad) };
     g.setColour(kPointer);
     g.drawLine({ c + dir * 5.0f * scale, c + dir * 19.0f * scale }, 1.9f * scale);
-    if (isMouseOverOrDragging())
-    {
-        g.setColour(juce::Colours::white.withAlpha(0.08f));
-        g.fillEllipse(juce::Rectangle<float>(48.0f * scale, 48.0f * scale).withCentre(c));
-    }
 }
 
 // ============================================================================ Sync switch
@@ -59,14 +55,15 @@ void SyncSwitch::paintButton(juce::Graphics& g, bool, bool)
 // ============================================================================ Slide switch
 void SlideSwitch::setFromX(float x)
 {
-    const float third = (float) getWidth() / 3.0f;
-    setValue(juce::jlimit(0.0, 2.0, (double) (int) (x / third)), juce::sendNotificationSync);
+    const int n = (int) xs.size();
+    const float slot = (float) getWidth() / (float) n;
+    setValue(getMinimum() + juce::jlimit(0, n - 1, (int) (x / slot)), juce::sendNotificationSync);
 }
 
 void SlideSwitch::paint(juce::Graphics& g)
 {
-    const int pos = juce::jlimit(0, 2, juce::roundToInt(getValue()));
-    const float cx = layout::pitchDestX[pos] - layout::pitchDestSwitch.getX();
+    const int pos = juce::jlimit(0, (int) xs.size() - 1, juce::roundToInt(getValue() - getMinimum()));
+    const float cx = xs[(size_t) pos];
     auto lever = juce::Rectangle<float>(30.0f, 14.0f).withCentre({ cx, (float) getHeight() * 0.5f });
     g.setColour(juce::Colours::black.withAlpha(0.5f));
     g.fillRoundedRectangle(lever.translated(0.0f, 1.5f), 3.5f);
@@ -88,7 +85,8 @@ void PanelButton::paintButton(juce::Graphics& g, bool over, bool down)
     {
         g.setColour(juce::Colour(0xff111314));
         g.fillRoundedRectangle(b, 5.0f);
-        g.setColour(kYellow.withAlpha(over ? 1.0f : 0.7f));
+        juce::ignoreUnused(over);
+        g.setColour(kYellow.withAlpha(0.85f));
         g.drawRoundedRectangle(b.reduced(1.0f), 5.0f, 1.5f);
         g.setFont(juce::FontOptions(16.0f, juce::Font::bold));
         g.drawText(getName(), b, juce::Justification::centred);
@@ -96,7 +94,6 @@ void PanelButton::paintButton(juce::Graphics& g, bool over, bool down)
     }
     // the artwork already shows the button; just add feedback
     if (down) { g.setColour(juce::Colours::black.withAlpha(0.35f)); g.fillRoundedRectangle(b, 5.0f); }
-    else if (over) { g.setColour(kYellow.withAlpha(0.10f)); g.fillRoundedRectangle(b, 5.0f); }
 }
 
 // ============================================================================ Keys
@@ -171,6 +168,7 @@ AboutOverlay::AboutOverlay()
     {
         l->setFont(juce::FontOptions(17.0f, juce::Font::bold), false);
         l->setColour(juce::HyperlinkButton::textColourId, kYellow);
+        l->setTooltip({});                                   // no hover help windows anywhere
         addAndMakeVisible(l);
     }
     addAndMakeVisible(manual);
@@ -311,6 +309,11 @@ WazpEditor::WazpEditor(WazpProcessor& p)
     pitchDestAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(proc.apvts, "pitchDest", pitchDest);
     pitchDest.onTouched = [this] { showValue("pitchDest"); };
 
+    panel.addAndMakeVisible(lfoSync);
+    lfoSync.setBounds(layout::lfoSyncSwitch.toNearestInt());
+    lfoSyncAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(proc.apvts, "lfoSync", lfoSync);
+    lfoSync.onTouched = [this] { showValue("lfoRate"); };
+
     for (auto [b, r] : { std::pair { &prev, layout::presetprev }, { &next, layout::presetnext },
                           { &save, layout::presetsave }, { &load, layout::presetload } })
     {
@@ -358,6 +361,8 @@ void WazpEditor::showValue(const juce::String& paramId)
     if (auto* param = proc.apvts.getParameter(paramId))
     {
         valueText = param->getName(24).toUpperCase() + "  " + param->getCurrentValueAsText().toUpperCase();
+        if (paramId == "lfoRate" && proc.apvts.getRawParameterValue("lfoSync")->load() > 0.5f)
+            valueText = juce::String("FREQ  SYNC ") + sync::names[sync::divisionFromKnob(param->getValue())];
         valueUntil = juce::Time::getMillisecondCounterHiRes() + 1500.0;
         display.text = valueText;
         display.repaint();

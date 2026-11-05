@@ -47,7 +47,7 @@ void Engine::noteOn(int note)
     currentNote = note;
     targetPitch = note;
     pendingTrigger = true;
-    lfoPhase = 0.0;                            // the control osc restarts on every note, like the original
+    if (!lfoLocked) lfoPhase = 0.0;            // free mode: the control osc restarts on every note, like the original
 }
 
 void Engine::noteOff(int note)
@@ -146,6 +146,7 @@ void Engine::render(float* out, int n, const Params& p)
     const float k1 = std::max(0.025f, 2.0f * (1.0f - res));   // full Q = right at the edge: rings very hard, never runs away
     const float k2 = 2.0f * (1.0f - 0.55f * res);
 
+    lfoLocked = p.lfoSynced;
     if (pendingTrigger)
     {
         vcaEnv.trigger(0.0);

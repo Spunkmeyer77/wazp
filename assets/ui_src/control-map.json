@@ -134,6 +134,27 @@
       "svg_id": "pitch-mod"
     },
     {
+      "id": "lfo-sync",
+      "type": "switch2",
+      "label": "FREE / SYNC",
+      "svg_id": "switch_lfo_sync",
+      "center": [
+        591,
+        431
+      ],
+      "bbox": [
+        557,
+        422,
+        68,
+        18
+      ],
+      "states": [
+        "free",
+        "sync"
+      ],
+      "default_state": "free"
+    },
+    {
       "id": "pitch-dest",
       "type": "switch3",
       "label": "OSC 1 / BOTH / OSC 2",

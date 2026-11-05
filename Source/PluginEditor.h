@@ -33,7 +33,7 @@ private:
 class SlideSwitch : public juce::Slider
 {
 public:
-    SlideSwitch() : Slider(juce::Slider::LinearHorizontal, juce::Slider::NoTextBox) {}
+    explicit SlideSwitch(std::vector<float> leverX) : Slider(juce::Slider::LinearHorizontal, juce::Slider::NoTextBox), xs(std::move(leverX)) {}
     void paint(juce::Graphics&) override;
     void mouseDown(const juce::MouseEvent& e) override { setFromX(e.position.x); if (onTouched) onTouched(); }
     void mouseDrag(const juce::MouseEvent& e) override { setFromX(e.position.x); if (onTouched) onTouched(); }
@@ -41,6 +41,7 @@ public:
     std::function<void()> onTouched;
 private:
     void setFromX(float x);
+    std::vector<float> xs;   // lever centres, local x
 };
 
 class PanelButton : public juce::Button
@@ -111,8 +112,8 @@ private:
     juce::OwnedArray<wazp::Knob> knobs;
     juce::OwnedArray<juce::AudioProcessorValueTreeState::SliderAttachment> attachments;
     wazp::SyncSwitch sync, hold;
-    wazp::SlideSwitch pitchDest;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> pitchDestAttachment;
+    wazp::SlideSwitch pitchDest { { 13.0f, 47.0f, 81.0f } }, lfoSync { { 17.0f, 51.0f } };
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> pitchDestAttachment, lfoSyncAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> syncAttachment, holdAttachment;
     wazp::PanelButton prev { "<" }, next { ">" }, save { "SAVE" }, load { "LOAD" };
     wazp::Keys keys;

@@ -8,7 +8,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 DOCS = HERE.parent
-VERSION = sys.argv[1] if len(sys.argv) > 1 else "1.0.5"
+VERSION = sys.argv[1] if len(sys.argv) > 1 else "1.0.6"
 PANEL = "data:image/jpeg;base64," + base64.b64encode((HERE / "img" / "panel.jpg").read_bytes()).decode()
 
 CSS = """
@@ -87,7 +87,7 @@ If macOS still blocks it, go to <b>System Settings &rarr; Privacy &amp; Security
 <div class="note">WAZP is monophonic: one note at a time, last-note priority. Hold a note and play another for a legato line; with GLIDE up the pitch slides between them.</div>""")
 
     d.page("""<h2>The Panel</h2>
-<p>Drag a knob up or down to turn it (scroll wheel works too), double-click to return it to its default. While you move a control,
+<p>Drag a knob up or down to turn it (scroll wheel works too), double-click to return it to its default. There are no pop-up hints when you hover over the panel: while you move a control,
 the preset window shows its name and value. The window can be resized from the bottom-right corner.</p>
 <h3>Keyboard</h3>""" + rows([
         ("SYNC", "Hard-syncs oscillator 2 to oscillator 1. Set oscillator 2 higher than oscillator 1 (range or PITCH) and sweep PITCH for the classic tearing sync sound."),
@@ -107,6 +107,7 @@ the preset window shows its name and value. The window can be resized from the b
     d.page("<h2>The Panel (continued)</h2><h3>Control Osc.</h3>" + rows([
         ("FREQ.", "Speed of the control oscillator, 0.05 Hz up to 1 kHz. It restarts with every new note. Above about 30 Hz it stops being a wobble and becomes audio-rate modulation: metallic, growling, FM-like tones."),
         ("PITCH MOD.", "How much the control oscillator moves the pitch of both oscillators (up to +/- 12 semitones). Vibrato at low settings, sirens and bleeps higher up."),
+        ("FREE / SYNC", "Slide switch under FREQ. FREE: FREQ. sets the speed in Hz and the control oscillator restarts with every note. SYNC: the control oscillator locks to your DAW tempo and FREQ. steps through note lengths, from 4 BARS (fully left) through 1 BAR, 1/2, 1/4, 1/8 and 1/16 (with dotted and triplet values) to 1/32 (fully right); the display shows the chosen value. While the DAW is playing, the cycle also follows the song position, so wobbles and random steps land on the beat."),
         ("OSC 1 / BOTH / OSC 2", "Slide switch under PITCH MOD.: chooses which oscillator the pitch modulation (control oscillator and mod wheel) moves. BOTH moves both together. OSC 1 or OSC 2 moves only one, so it beats and drifts against the steady one: moving detune, chorus-like beating and, with SYNC on and OSC 2 selected, sweeping sync tones."),
         ("NOISE SIGNAL", "Level of white noise in the mixer (0 - 10). Use it alone with the filter for wind, surf and percussion."),
         ("Wave", "Shape of the control oscillator: sine, square, noise (smoothed random movement) and RND (a new random value every cycle: sample and hold)."),
@@ -149,6 +150,10 @@ and the mod wheel (CC 1, adds pitch modulation from the control oscillator). Vel
 
 
 HISTORY = [
+    ("1.0.6", [
+        "New FREE / SYNC switch under the control oscillator FREQ. knob: tempo sync to the DAW, with note lengths from 4 bars to 1/32 (dotted and triplet values included), locked to the song position while playing.",
+        "Removed all hover pop-ups and hover highlights from the panel.",
+    ]),
     ("1.0.5", [
         "New OSC 1 / BOTH / OSC 2 switch under PITCH MOD.: choose which oscillator the pitch modulation moves.",
         "New NOTCH mode on the filter CONTROL knob.",

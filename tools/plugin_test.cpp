@@ -66,6 +66,14 @@ int main(int argc, char** argv)
         check(held > 0.05f && tail2 < 1e-3f, "HOLD sustains after key up and releases when switched off");
     }
 
+    // control osc tempo sync runs without a host play head too
+    {
+        setParam("lfoSync", 1.0f); setParam("lfoPitch", 0.5f);
+        float pk = run(40, on(55)); run(1, off(55)); run(200);
+        check(pk > 0.05f && finite, "control osc tempo sync plays");
+        setParam("lfoSync", 0.0f); setParam("lfoPitch", 0.0f);
+    }
+
     // every factory preset plays a phrase
     const int nf = (int) wazp::factoryPresets().size();
     bool allSound = true;

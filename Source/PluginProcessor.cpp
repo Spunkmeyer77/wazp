@@ -1,5 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "TempoSync.h"
 
 using APVTS = juce::AudioProcessorValueTreeState;
 
@@ -57,6 +58,8 @@ APVTS::ParameterLayout WazpProcessor::createLayout()
     fl("lfoRate", "Control Osc Freq", skewed(0.05f, 1000.0f, 6.0f), 2.0f, hz);
     fl("lfoPitch", "Pitch Mod", { 0.0f, 1.0f }, 0.0f, pct);
     fl("noise", "Noise Signal", { 0.0f, 1.0f }, 0.0f, tenScale);
+    l.add(std::make_unique<AudioParameterChoice>(ParameterID { "lfoSync", 1 }, "Control Osc Sync",
+                                                 StringArray { "Free", "Sync" }, 0));
     l.add(std::make_unique<AudioParameterChoice>(ParameterID { "lfoWave", 1 }, "Control Osc Wave",
                                                  StringArray { "Sine", "Square", "Noise", "Random" }, 0));
 
@@ -126,6 +129,25 @@ void WazpProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuf
     wazp::Params p;
     readParams(p);
     engine.setHold(apvts.getRawParameterValue("hold")->load() > 0.5f);
+
+    // control osc tempo sync: FREQ. picks a note division, the phase follows the song position
+    if (apvts.getRawParameterValue("lfoSync")->load() > 0.5f)
+    {
+        double bpm = 120.0, ppq = 0.0;
+        bool playing = false;
+        if (auto* ph = getPlayHead())
+            if (auto pos = ph->getPosition())
+            {
+                if (auto b = pos->getBpm()) bpm = *b;
+                if (auto q = pos->getPpqPosition()) ppq = *q;
+                playing = pos->getIsPlaying();
+            }
+        const int div = wazp::sync::divisionFromKnob(apvts.getParameter("lfoRate")->getValue());
+        const double beats = wazp::sync::beats[div];
+        p.lfoSynced = true;
+        p.lfoRate = (float) (bpm / 60.0 / beats);
+        if (playing) engine.setLfoPhase(ppq / beats);
+    }
     if ((int) mono.size() < n) mono.resize((size_t) n);
 
     int pos = 0;

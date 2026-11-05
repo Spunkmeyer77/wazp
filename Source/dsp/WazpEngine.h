@@ -30,6 +30,7 @@ struct Params
     float cutoff = 8000.0f;      // Hz
     float resonance = 0.2f;      // 0..1
     int   filterMode = 0;        // 0 LO, 1 BAND, 2 HI, 3 NOTCH
+    bool  lfoSynced = false;     // control osc locked to host tempo (rate set by the processor)
     int   pitchDest = 1;         // pitch modulation goes to: 0 osc 1, 1 both, 2 osc 2
     float filterEnv = 0.0f;      // -1..1
     float filterLfo = 0.0f;      // -1..1
@@ -100,6 +101,8 @@ public:
     void setModWheel(float v) { modWheel = v; }
     // HOLD: the last note keeps sounding after its key is released, until a new note or HOLD off
     void setHold(bool on);
+    // tempo sync: snap the control-osc phase to the host position
+    void setLfoPhase(double ph) { lfoPhase = ph - std::floor(ph); }
     // renders mono into out[0..n)
     void render(float* out, int n, const Params& p);
     bool isActive() const { return vcaEnv.active(); }
@@ -124,6 +127,7 @@ private:
     uint32_t rng = 0x12345678u;
     bool pendingTrigger = false, pendingRelease = false;
     bool hold = false, heldByHold = false;
+    bool lfoLocked = false;
     Envelope vcaEnv, ctrlEnv;
 };
 
