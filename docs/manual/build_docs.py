@@ -8,7 +8,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 DOCS = HERE.parent
-VERSION = sys.argv[1] if len(sys.argv) > 1 else "1.0.6"
+VERSION = sys.argv[1] if len(sys.argv) > 1 else "1.0.7"
 PANEL = "data:image/jpeg;base64," + base64.b64encode((HERE / "img" / "panel.jpg").read_bytes()).decode()
 
 CSS = """
@@ -84,6 +84,7 @@ If macOS still blocks it, go to <b>System Settings &rarr; Privacy &amp; Security
 <p><b>Windows:</b> run <i>WAZP-{VERSION}-Windows-Setup.exe</i>. The VST3 goes to <i>C:\\Program Files\\Common Files\\VST3</i>.</p>
 <p><b>Linux:</b> unpack the .tar.gz and run <i>./install.sh</i>.</p>
 <p>Then rescan plug-ins in your DAW (Ableton Live: Settings &rarr; Plug-Ins &rarr; Rescan) and load WAZP on a MIDI track.</p>
+<p><b>Ableton Live:</b> if Live once failed to open a WAZP version, it may keep it disabled (&ldquo;Some plug-ins are disabled&rdquo;). After installing the new version, hold <b>Alt/Option</b> and click <b>Rescan</b> in Settings &rarr; Plug-Ins to rescan everything, then load WAZP again.</p>
 <div class="note">WAZP is monophonic: one note at a time, last-note priority. Hold a note and play another for a legato line; with GLIDE up the pitch slides between them.</div>""")
 
     d.page("""<h2>The Panel</h2>
@@ -150,6 +151,9 @@ and the mod wheel (CC 1, adds pitch modulation from the control oscillator). Vel
 
 
 HISTORY = [
+    ("1.0.7", [
+        "Fixed: 1.0.6 would not open on macOS versions older than 15 (\"This Audio Unit could not be opened\"). WAZP runs again on macOS 10.13 and newer.",
+    ]),
     ("1.0.6", [
         "New FREE / SYNC switch under the control oscillator FREQ. knob: tempo sync to the DAW, with note lengths from 4 bars to 1/32 (dotted and triplet values included), locked to the song position while playing.",
         "Removed all hover pop-ups and hover highlights from the panel.",

@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(WAZP VERSION 1.0.6)
+# must be set before project(), otherwise the build machine's own macOS version is used
+set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13" CACHE STRING "Minimum macOS version")
+
+project(WAZP VERSION 1.0.7)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13" CACHE STRING "Minimum macOS version")
 
 # JUCE: use a local checkout if -DJUCE_DIR=... is given, otherwise download it
 if(DEFINED JUCE_DIR)
