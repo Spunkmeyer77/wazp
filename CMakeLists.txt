@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.22)
 # must be set before project(), otherwise the build machine's own macOS version is used
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13" CACHE STRING "Minimum macOS version")
 
-project(WAZP VERSION 1.0.7)
+project(WAZP VERSION 1.0.8)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

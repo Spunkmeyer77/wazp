@@ -8,7 +8,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 DOCS = HERE.parent
-VERSION = sys.argv[1] if len(sys.argv) > 1 else "1.0.7"
+VERSION = sys.argv[1] if len(sys.argv) > 1 else "1.0.8"
 PANEL = "data:image/jpeg;base64," + base64.b64encode((HERE / "img" / "panel.jpg").read_bytes()).decode()
 
 CSS = """
@@ -75,7 +75,15 @@ and two envelopes that can repeat on their own.</p>
 <ul><li>macOS: Audio Unit, VST3 and standalone app (Apple Silicon and Intel), one .pkg installer.</li>
 <li>Windows: VST3 and standalone app, one Setup.exe installer.</li>
 <li>Linux: VST3, LV2 and standalone app (.tar.gz with an install script).</li></ul>
-<h3>Installing</h3>
+<h3>System Requirements</h3>
+<table><tr><th>System</th><th>Requirements</th></tr>
+<tr><td>macOS</td><td>macOS 10.13 High Sierra or newer on Intel; macOS 11 Big Sur or newer on Apple Silicon (M1 and later, runs natively). A host that loads Audio Unit (AU) or VST3 instruments, e.g. Ableton Live, Logic Pro, GarageBand, Bitwig Studio, Reaper, FL Studio, Cubase, or the included standalone app.</td></tr>
+<tr><td>Windows</td><td>Windows 10 or 11, 64-bit. A host that loads VST3 instruments, or the included standalone app.</td></tr>
+<tr><td>Linux</td><td>64-bit (x86_64) distribution with ALSA or JACK. A host that loads VST3 or LV2 instruments, or the included standalone app.</td></tr>
+<tr><td>All systems</td><td>64-bit host, about 30 MB of disk space, screen of at least 1280 &times; 800 (the panel can be resized), MIDI keyboard or MIDI clips to play it.</td></tr>
+</table>
+""")
+    d.page(f"""<h2>Installing</h2>
 <p><b>macOS:</b> open <i>WAZP-{VERSION}-macOS.pkg</i> and follow the steps. Click <b>Customize</b> to choose formats.</p>
 <div class="note"><b>&#9888; macOS security warning.</b> The WAZP installer is not notarised by Apple, so the first time you open it macOS
 may say it &ldquo;cannot be opened because it is from an unidentified developer&rdquo; or &ldquo;cannot be verified&rdquo;.
@@ -151,6 +159,9 @@ and the mod wheel (CC 1, adds pitch modulation from the control oscillator). Vel
 
 
 HISTORY = [
+    ("1.0.8", [
+        "The manual now lists the system requirements; installing instructions moved to their own page.",
+    ]),
     ("1.0.7", [
         "Fixed: 1.0.6 would not open on macOS versions older than 15 (\"This Audio Unit could not be opened\"). WAZP runs again on macOS 10.13 and newer.",
     ]),
