@@ -96,7 +96,7 @@ If macOS still blocks it, go to <b>System Settings &rarr; Privacy &amp; Security
 <div class="note">WAZP is monophonic: one note at a time, last-note priority. Hold a note and play another for a legato line; with GLIDE up the pitch slides between them.</div>""")
 
     d.page("""<h2>The Panel</h2>
-<p>Drag a knob up or down to turn it (scroll wheel works too), double-click to return it to its default. There are no pop-up hints when you hover over the panel: while you move a control,
+<p>Drag a knob up or down to turn it, double-click to return it to its default. The mouse wheel never changes a control, so scrolling over the panel is safe. There are no pop-up hints when you hover over the panel: while you move a control,
 the preset window shows its name and value. The window can be resized from the bottom-right corner.</p>
 <h3>Keyboard</h3>""" + rows([
         ("SYNC", "Hard-syncs oscillator 2 to oscillator 1. Set oscillator 2 higher than oscillator 1 (range or PITCH) and sweep PITCH for the classic tearing sync sound."),
@@ -161,6 +161,7 @@ and the mod wheel (CC 1, adds pitch modulation from the control oscillator). Vel
 HISTORY = [
     ("1.0.8", [
         "The manual now lists the system requirements; installing instructions moved to their own page.",
+        "The mouse wheel no longer changes knobs or switches, so scrolling over the panel cannot alter a sound by accident.",
     ]),
     ("1.0.7", [
         "Fixed: 1.0.6 would not open on macOS versions older than 15 (\"This Audio Unit could not be opened\"). WAZP runs again on macOS 10.13 and newer.",

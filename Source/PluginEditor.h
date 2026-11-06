@@ -13,7 +13,6 @@ public:
     std::function<void()> onTouched;
     void mouseDown(const juce::MouseEvent& e) override { Slider::mouseDown(e); if (onTouched) onTouched(); }
     void mouseDrag(const juce::MouseEvent& e) override { Slider::mouseDrag(e); if (onTouched) onTouched(); }
-    void mouseWheelMove(const juce::MouseEvent& e, const juce::MouseWheelDetails& w) override { Slider::mouseWheelMove(e, w); if (onTouched) onTouched(); }
 private:
     float scale;
     std::vector<float> stepAngles;
@@ -33,7 +32,7 @@ private:
 class SlideSwitch : public juce::Slider
 {
 public:
-    explicit SlideSwitch(std::vector<float> leverX) : Slider(juce::Slider::LinearHorizontal, juce::Slider::NoTextBox), xs(std::move(leverX)) {}
+    explicit SlideSwitch(std::vector<float> leverX) : Slider(juce::Slider::LinearHorizontal, juce::Slider::NoTextBox), xs(std::move(leverX)) { setScrollWheelEnabled(false); }
     void paint(juce::Graphics&) override;
     void mouseDown(const juce::MouseEvent& e) override { setFromX(e.position.x); if (onTouched) onTouched(); }
     void mouseDrag(const juce::MouseEvent& e) override { setFromX(e.position.x); if (onTouched) onTouched(); }

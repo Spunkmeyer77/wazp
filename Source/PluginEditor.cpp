@@ -16,7 +16,7 @@ Knob::Knob(float s, std::vector<float> steps, float sweepDeg)
 {
     setMouseDragSensitivity(stepAngles.empty() ? 220 : 60 * (int) stepAngles.size());
     setVelocityBasedMode(false);
-    setScrollWheelEnabled(true);
+    setScrollWheelEnabled(false);              // the mouse wheel never changes a knob
 }
 
 void Knob::paint(juce::Graphics& g)
