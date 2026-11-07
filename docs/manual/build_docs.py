@@ -139,8 +139,11 @@ the preset window shows its name and value. The window can be resized from the b
         ("Preset display", "Click the name to open the full preset list: all factory presets, then your own presets (MY PRESETS). The current one is ticked; click any name to load it. OPEN PRESET FOLDER at the bottom shows your presets in Finder / Explorer."),
         ("SAVE", "Saves the current sound as a .wazp file. By default it goes to <i>Documents / Transistor Labs / WAZP / Presets</i>; presets saved there appear in the &lt; &gt; list."),
         ("LOAD", "Opens any .wazp file."),
-    ]) + """<p>WAZP comes with 19 factory presets: INIT, BUZZ BASS, WASP STING, SYNC SCREAM, REPEAT PERC, DREXY ACID, NOISE WIND,
-SIREN, RANDOM BLEEPS, HOLLOW LEAD, HIGH PASS FIZZ, BAND PLUCK, SUB DRONE, WOBBLE, SLOW SWELL, BEATING DETUNE, SYNC SWEEP, NOTCH PHASER and 8-BIT SQUARE.
+    ]) + """<p>WAZP comes with 33 factory presets: INIT, BUZZ BASS, WASP STING, SYNC SCREAM, REPEAT PERC, DREXY ACID, NOISE WIND,
+SIREN, RANDOM BLEEPS, HOLLOW LEAD, HIGH PASS FIZZ, BAND PLUCK, SUB DRONE, WOBBLE, SLOW SWELL, BEATING DETUNE, SYNC SWEEP, NOTCH PHASER,
+FM BELL, OSC 2 FM GRIT, CLANG, VIBRATO OSC 1, RING TONE, AUDIO RATE FILTER, KICK, TOM, CLOSED HAT, OPEN HAT, METAL PERC, RIM SHOT,
+SNARE TIGHT, SNARE NOISY and 8-BIT SQUARE.</p>
+<p>The drum presets (KICK to SNARE NOISY) are short one-shots: play them from MIDI clips like a drum machine, and change the pitch by playing higher or lower notes.
 The presets also appear in your DAW's program list.</p>
 <div class="note">Your DAW saves the complete state (every knob and the preset name) with the project, so you don't need to save a preset to keep a sound in a song.</div>
 <h2 style="margin-top:8mm">Automation &amp; MIDI</h2>
@@ -163,6 +166,7 @@ HISTORY = [
         "The manual now lists the system requirements; installing instructions moved to their own page.",
         "The mouse wheel no longer changes knobs or switches.",
         "WAZP is now made by Transistor Labs: new brand plate with the Transistor Labs logo next to the speaker grille, and the new name in the About window, installers and manual.",
+        "14 new factory presets (33 in total): sounds built on the pitch mod destination switch and audio-rate modulation (FM BELL, OSC 2 FM GRIT, CLANG, VIBRATO OSC 1, RING TONE, AUDIO RATE FILTER), percussion (KICK, TOM, CLOSED HAT, OPEN HAT, METAL PERC, RIM SHOT) and two snare drums (SNARE TIGHT, SNARE NOISY).",
         "Your saved presets now live in Documents / Transistor Labs / WAZP / Presets; presets from earlier versions are copied there automatically.",
     ]),
     ("1.0.7", [
