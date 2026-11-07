@@ -167,6 +167,7 @@ HISTORY = [
         "The mouse wheel no longer changes knobs or switches.",
         "WAZP is now made by Transistor Labs: new brand plate with the Transistor Labs logo next to the speaker grille, and the new name in the About window, installers and manual.",
         "14 new factory presets (33 in total): sounds built on the pitch mod destination switch and audio-rate modulation (FM BELL, OSC 2 FM GRIT, CLANG, VIBRATO OSC 1, RING TONE, AUDIO RATE FILTER), percussion (KICK, TOM, CLOSED HAT, OPEN HAT, METAL PERC, RIM SHOT) and two snare drums (SNARE TIGHT, SNARE NOISY).",
+        "Installers updated for Transistor Labs: on Windows, an earlier installation is moved to the Transistor Labs folder and the old one is removed. Linux LV2 hosts may need WAZP added to existing projects again.",
         "Your saved presets now live in Documents / Transistor Labs / WAZP / Presets; presets from earlier versions are copied there automatically.",
     ]),
     ("1.0.7", [

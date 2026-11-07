@@ -14,7 +14,7 @@ VERSION=$(sed -nE 's/^project\(WAZP VERSION ([0-9.]+)\).*/\1/p' CMakeLists.txt)
 ART="build/WAZP_artefacts/Release"
 OUT="dist"
 WORK="$OUT/work"
-ID="com.ticcoross.wazp"
+ID="com.transistorlabs.wazp"
 DEV_ID_APP="${DEV_ID_APP:-}"
 DEV_ID_INSTALLER="${DEV_ID_INSTALLER:-}"
 NOTARY_PROFILE="${NOTARY_PROFILE:-}"
@@ -77,7 +77,7 @@ cat > "$WORK/distribution.xml" <<EOF
 <?xml version="1.0" encoding="utf-8"?>
 <installer-gui-script minSpecVersion="2">
     <title>WAZP $VERSION</title>
-    <organization>com.ticcoross</organization>
+    <organization>com.transistorlabs</organization>
     <welcome file="welcome.html" mime-type="text/html"/>
     <options customize="allow" require-scripts="false" hostArchitectures="arm64,x86_64"/>
     <domains enable_anywhere="false" enable_currentUserHome="false" enable_localSystem="true"/>

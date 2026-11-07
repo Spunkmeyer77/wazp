@@ -35,10 +35,9 @@ juce_add_plugin(WAZP
     PLUGIN_MANUFACTURER_CODE Tcro
     PLUGIN_CODE Wazp
     FORMATS ${WAZP_FORMATS}
-    LV2URI "urn:ticcoross:wazp"
+    LV2URI "urn:transistorlabs:wazp"
     PRODUCT_NAME "WAZP"
-    # kept from the first release so hosts and projects keep recognising WAZP
-    BUNDLE_ID com.ticcoross.wazp
+    BUNDLE_ID com.transistorlabs.wazp
     IS_SYNTH TRUE
     NEEDS_MIDI_INPUT TRUE
     NEEDS_MIDI_OUTPUT FALSE

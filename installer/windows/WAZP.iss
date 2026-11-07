@@ -16,6 +16,9 @@ AppVerName=WAZP {#AppVersion}
 AppPublisher=Transistor Labs
 DefaultDirName={autopf}\Transistor Labs\WAZP
 DefaultGroupName=Transistor Labs
+; upgrades from older versions move into the Transistor Labs folder too
+UsePreviousAppDir=no
+UsePreviousGroup=no
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 OutputDir=..\..\dist
@@ -45,3 +48,10 @@ Name: "{autoprograms}\WAZP"; Filename: "{app}\WAZP.exe"; Components: app
 
 [Messages]
 FinishedLabel=WAZP is installed.%n%nRescan plug-ins in your DAW (Ableton Live: Settings > Plug-Ins > Rescan).
+
+[InstallDelete]
+; remove the standalone app and shortcuts left by versions released under the old vendor name
+Type: filesandordirs; Name: "{autopf}\Ticco Ross\WAZP"
+Type: dirifempty;     Name: "{autopf}\Ticco Ross"
+Type: filesandordirs; Name: "{commonprograms}\Ticco Ross\WAZP*"
+Type: filesandordirs; Name: "{autoprograms}\Ticco Ross"
