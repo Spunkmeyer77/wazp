@@ -160,5 +160,5 @@ jobs:
           files: dist/*
           tag_name: v${{ env.VERSION }}
           name: WAZP ${{ env.VERSION }}
-          body: "WAZP ${{ env.VERSION }} - monophonic synthesizer by Ticco Ross. See WAZP Update History.pdf. macOS: the .pkg installer; Windows: the Setup.exe; Linux: the .tar.gz. The manual is attached."
+          body: "WAZP ${{ env.VERSION }} - monophonic synthesizer by Transistor Labs. See WAZP Update History.pdf. macOS: the .pkg installer; Windows: the Setup.exe; Linux: the .tar.gz. The manual is attached."
           generate_release_notes: false

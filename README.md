@@ -4,7 +4,7 @@
 Two oscillators with footage ranges and pulse width, oscillator sync, a mixer, a control oscillator with noise and random modulation,
 a low/band/high-pass filter, two envelopes with repeat mode, glide and preset management.
 
-By **Ticco Ross** - [ticcoross.gumroad.com](https://ticcoross.gumroad.com/) - ticcoross@gmail.com
+By **Transistor Labs** - [ticcoross.gumroad.com](https://ticcoross.gumroad.com/) - ticcoross@gmail.com
 
 ## Download
 

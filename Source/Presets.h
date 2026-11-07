@@ -54,9 +54,16 @@ inline const std::vector<FactoryPreset>& factoryPresets()
 
 inline juce::File userPresetFolder()
 {
-    auto f = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory)
-                 .getChildFile("Ticco Ross").getChildFile("WAZP").getChildFile("Presets");
-    f.createDirectory();
+    const auto docs = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory);
+    auto f = docs.getChildFile("Transistor Labs").getChildFile("WAZP").getChildFile("Presets");
+    if (!f.isDirectory())
+    {
+        f.createDirectory();
+        // bring presets saved by older versions along
+        auto old = docs.getChildFile("Ticco Ross").getChildFile("WAZP").getChildFile("Presets");
+        for (auto& p : old.findChildFiles(juce::File::findFiles, false, "*.wazp"))
+            p.copyFileTo(f.getChildFile(p.getFileName()));
+    }
     return f;
 }
 

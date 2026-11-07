@@ -31,12 +31,13 @@ endif()
 option(WAZP_COPY_PLUGINS "Copy plug-ins to the plug-in folders after building" ON)
 
 juce_add_plugin(WAZP
-    COMPANY_NAME "Ticco Ross"
+    COMPANY_NAME "Transistor Labs"
     PLUGIN_MANUFACTURER_CODE Tcro
     PLUGIN_CODE Wazp
     FORMATS ${WAZP_FORMATS}
     LV2URI "urn:ticcoross:wazp"
     PRODUCT_NAME "WAZP"
+    # kept from the first release so hosts and projects keep recognising WAZP
     BUNDLE_ID com.ticcoross.wazp
     IS_SYNTH TRUE
     NEEDS_MIDI_INPUT TRUE
@@ -52,7 +53,8 @@ juce_add_binary_data(WAZPData SOURCES
     "docs/WAZP Manual.pdf"
     assets/ui/background.jpg
     assets/ui/sync_off.png
-    assets/ui/sync_on.png)
+    assets/ui/sync_on.png
+    assets/brand/tl_icon_yellow.svg)
 
 set(WAZP_SOURCES Source/PluginProcessor.cpp Source/PluginEditor.cpp Source/dsp/WazpEngine.cpp)
 target_sources(WAZP PRIVATE ${WAZP_SOURCES})

@@ -48,7 +48,7 @@ class Doc:
     def cover(self, doc_name):
         self.pages.append(f'''<section class="page cover"><div class="frame"></div><div class="frame2"></div>
 <h1>WAZP</h1><div class="sub">MONOPHONIC SYNTHESIZER</div><div class="doc">{doc_name}</div><div class="ver">Version {VERSION}</div>
-<img src="{PANEL}"><div class="by">TICCO ROSS &nbsp;|&nbsp; ticcoross.gumroad.com</div></section>''')
+<img src="{PANEL}"><div class="by">TRANSISTOR LABS &nbsp;|&nbsp; ticcoross.gumroad.com</div></section>''')
 
     def page(self, body):
         n = len(self.pages) + 1
@@ -137,7 +137,7 @@ the preset window shows its name and value. The window can be resized from the b
 <p>The preset window at the top right shows the current preset number and name.</p>""" + rows([
         ("&lt; &nbsp;&gt;", "Step through the factory presets, followed by your own presets."),
         ("Preset display", "Click the name to open the full preset list: all factory presets, then your own presets (MY PRESETS). The current one is ticked; click any name to load it. OPEN PRESET FOLDER at the bottom shows your presets in Finder / Explorer."),
-        ("SAVE", "Saves the current sound as a .wazp file. By default it goes to <i>Documents / Ticco Ross / WAZP / Presets</i>; presets saved there appear in the &lt; &gt; list."),
+        ("SAVE", "Saves the current sound as a .wazp file. By default it goes to <i>Documents / Transistor Labs / WAZP / Presets</i>; presets saved there appear in the &lt; &gt; list."),
         ("LOAD", "Opens any .wazp file."),
     ]) + """<p>WAZP comes with 19 factory presets: INIT, BUZZ BASS, WASP STING, SYNC SCREAM, REPEAT PERC, DREXY ACID, NOISE WIND,
 SIREN, RANDOM BLEEPS, HOLLOW LEAD, HIGH PASS FIZZ, BAND PLUCK, SUB DRONE, WOBBLE, SLOW SWELL, BEATING DETUNE, SYNC SWEEP, NOTCH PHASER and 8-BIT SQUARE.
@@ -162,6 +162,8 @@ HISTORY = [
     ("1.0.8", [
         "The manual now lists the system requirements; installing instructions moved to their own page.",
         "The mouse wheel no longer changes knobs or switches.",
+        "WAZP is now made by Transistor Labs: new brand plate with the Transistor Labs logo next to the speaker grille, and the new name in the About window, installers and manual.",
+        "Your saved presets now live in Documents / Transistor Labs / WAZP / Presets; presets from earlier versions are copied there automatically.",
     ]),
     ("1.0.7", [
         "Fixed: 1.0.6 would not open on macOS versions older than 15 (\"This Audio Unit could not be opened\"). WAZP runs again on macOS 10.13 and newer.",

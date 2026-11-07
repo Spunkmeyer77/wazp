@@ -35,7 +35,7 @@ EOS
 chmod +x "$STAGE/install.sh" "$STAGE/uninstall.sh"
 
 cat > "$STAGE/README.txt" <<EOS
-WAZP $VERSION - Monophonic synthesizer - Ticco Ross 2026
+WAZP $VERSION - Monophonic synthesizer - Transistor Labs 2026
 
 Install:    ./install.sh      (VST3 -> ~/.vst3, LV2 -> ~/.lv2, app -> ~/.local/bin/WAZP)
 Uninstall:  ./uninstall.sh

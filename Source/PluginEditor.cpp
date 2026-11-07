@@ -172,6 +172,7 @@ AboutOverlay::AboutOverlay()
         addAndMakeVisible(l);
     }
     addAndMakeVisible(manual);
+    brandIcon = juce::Drawable::createFromImageData(BinaryData::tl_icon_yellow_svg, (size_t) BinaryData::tl_icon_yellow_svgSize);
     manual.onClick = []
     {
         auto f = juce::File::getSpecialLocation(juce::File::tempDirectory).getChildFile("WAZP Manual.pdf");
@@ -194,6 +195,9 @@ void AboutOverlay::paint(juce::Graphics& g)
     g.setColour(juce::Colour(0xfffff26c));
     g.drawRoundedRectangle(card.reduced(9.0f), 10.0f, 1.0f);
 
+    if (brandIcon != nullptr)
+        brandIcon->drawWithin(g, juce::Rectangle<float>(card.getX() + 30.0f, card.getY() + 28.0f, 48.0f, 55.0f),
+                              juce::RectanglePlacement::centred, 1.0f);
     auto t = card.reduced(30.0f);
     g.setColour(kYellow);
     g.setFont(juce::FontOptions(84.0f, juce::Font::bold));
@@ -202,7 +206,7 @@ void AboutOverlay::paint(juce::Graphics& g)
     g.drawText("MONOPHONIC SYNTHESIZER", t.removeFromTop(26.0f), juce::Justification::centred);
     g.setColour(kYellow.withAlpha(0.75f));
     g.setFont(juce::FontOptions(15.0f));
-    g.drawText(juce::String("Version ") + JucePlugin_VersionString + "   |   Ticco Ross 2026", t.removeFromTop(26.0f), juce::Justification::centred);
+    g.drawText(juce::String("Version ") + JucePlugin_VersionString + "   |   Transistor Labs 2026", t.removeFromTop(26.0f), juce::Justification::centred);
     g.setColour(kYellow.withAlpha(0.4f));
     g.drawHorizontalLine((int) t.getY() + 10, t.getX() + 60.0f, t.getRight() - 60.0f);
     g.setFont(juce::FontOptions(12.0f));

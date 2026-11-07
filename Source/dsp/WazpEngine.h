@@ -1,6 +1,6 @@
 #pragma once
 // WAZP sound engine - a monophonic late-70s style synth voice.
-// Ticco Ross:
+// Transistor Labs:
 //   2 oscillators (32'-2', OFF / pulse / saw, pulse width, osc 2 pitch, hard sync)
 //   mixer (osc 1, osc 2, noise) -> soft-saturating state-variable filter (LO / BAND / HI)
 //   control oscillator (sine / square / noise / random) -> pitch and filter

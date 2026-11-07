@@ -80,6 +80,7 @@ private:
     juce::HyperlinkButton store { "ticcoross.gumroad.com", juce::URL("https://ticcoross.gumroad.com/") };
     juce::HyperlinkButton mail { "ticcoross@gmail.com", juce::URL("mailto:ticcoross@gmail.com") };
     PanelButton manual { "USER MANUAL" };
+    std::unique_ptr<juce::Drawable> brandIcon;   // Transistor Labs hexagon
 };
 } // namespace wazp
 

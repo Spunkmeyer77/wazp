@@ -65,7 +65,7 @@ stage app  "$ART/Standalone/WAZP.app" "/Applications"
 cat > "$WORK/resources/welcome.html" <<EOF
 <html><body style="font-family:-apple-system,Helvetica;font-size:13px">
 <h2>WAZP $VERSION</h2>
-<p>Monophonic synthesizer &middot; Ticco Ross 2026</p>
+<p>Monophonic synthesizer &middot; Transistor Labs 2026</p>
 <p>This installs the Audio Unit, the VST3 plug-in and the standalone app.
 Click <b>Customize</b> on the next screen to skip any of them.</p>
 <p>After installing, rescan plug-ins in your DAW
